@@ -1,6 +1,6 @@
 const core = require('@actions/core'); 
-const shell = require('shelljs');
 const wait = require('./wait');
+const exec = require('@actions/exec');
 
 async function run() {
   // Get all the inputs needed
@@ -16,14 +16,9 @@ async function run() {
   const awsAccessKey = core.getInput('aws-access-key');
   const awsSecretAccessKey = core.getInput('aws-secret-access-key');
   const awsRegion = core.getInput('aws-region');
-  
   // const pulumiAccessToken = core.getInput('pulumi-access-token');
 
   console.log(`Path: ${configPath} ${pulumiGoal} ${stackName} ${cloudProvider} ${cloudArch}`);
-
-  // Get the JSON webhook payload for the event that triggered the workflow
-  // const payload = JSON.stringify(github.context.payload, undefined, 2)
-  // console.log(`The event payload: ${payload}`);
 
   // Simple check on provider and arch, we don't support gcp with an arm64 arch
   // TODO: use enumerated values
@@ -39,43 +34,45 @@ async function run() {
 
   // Clone the repo and install the dependencies
   core.info("Cloning the repo and installing the dependencies...");
-  shell.exec(`git clone https://github.com/pavlovic-ivan/ephemeral-github-runner.git`);
-  shell.cd(`ephemeral-github-runner`);
-  shell.exec(`npm ci`);
+  const runnersRepoUrl = "https://github.com/pavlovic-ivan/ephemeral-github-runner.git";
+  await exec.exec('git', ['clone', `${runnersRepoUrl}`]);
+  const repoName = "ephemeral-github-runner";
+  await exec.exec('cd', [`${repoName}`]);
+  await exec.exec('npm', ['ci']);
 
   // Export the env variable we need in our environment
   core.info("Setting up env variables...");
-  shell.env["APP_ID"]=appID;
-  shell.env["APP_PRIVATE_KEY"]=appPrivateKey;
-  shell.env["PULUMI_BACKEND_URL"]=pulumiBackendUrl;
-  shell.env["PULUMI_CONFIG_PASSPHRASE"]=pulumiConfigPassphrase;
-  shell.env["AWS_ACCESS_KEY_ID"]=awsAccessKey;
-  shell.env["AWS_SECRET_ACCESS_KEY"]=awsSecretAccessKey;
-  shell.env["AWS_REGION"]=awsRegion;
+  process.env.APP_ID=appID;
+  process.env.PULUMI_BACKEND_URL=pulumiBackendUrl;
+  process.env.APP_PRIVATE_KEY=appPrivateKey;
+  process.env.PULUMI_CONFIG_PASSPHRASE=pulumiConfigPassphrase;
+  process.env.AWS_ACCESS_KEY_ID=awsAccessKey;
+  process.env.AWS_SECRET_ACCESS_KEY=awsSecretAccessKey;
+  process.env.AWS_REGION=awsRegion;
   // Skip the update check 
-  shell.env["PULUMI_SKIP_UPDATE_CHECK"]="true";
-  shell.env["PULUMI_SKIP_CONFIRMATIONS"]="true";
-  shell.env["PULUMI_CREDENTIALS_PATH"]="/home/runner/.pulumi";
+  process.env.PULUMI_SKIP_UPDATE_CHECK="true";
+  process.env.PULUMI_SKIP_CONFIRMATIONS="true";
+  process.env.PULUMI_CREDENTIALS_PATH="/home/runner/.pulumi";
 
   // shell.env["PULUMI_ACCESS_TOKEN"]=pulumiAccessToken;
 
-  shell.exec(`printenv`);
-  shell.exec(`pulumi login ${pulumiBackendUrl}`);
+  await exec.exec('printenv');
+  await exec.exec('pulumi', ['login', `${pulumiBackendUrl}`]);
   core.info("Deploying the runners...");
-  shell.cd(`${cloudProvider}`);
-  shell.exec(`pulumi stack init ${stackName} --secrets-provider=passphrase`);
-  shell.exec(`pulumi stack select ${stackName}`);
-  shell.exec(`pulumi stack ls`);
-  shell.exec(`pulumi update --diff --config-file ${configPath}`);
+  await exec.exec('cd', [`${repoName}`]);
+  await process.exec('pulumi', ['stack init', `${stackName}`, '--secrets-provider=passphrase']);
+  await process.exec('pulumi', ['stack select', `${stackName}`]);
+  await process.exec('pulumi', ['stack ls']);
+  await process.exec('pulumi', ['update', '--diff', '--config-file', `${configPath}`]);
   core.info("Runners deployed!");
 
   core.info("Waiting some time");
-  wait(1000);  
+  await wait(1000);  
 
   core.info("Destroying the runners");
-  shell.exec(`pulumi stack select ${stackName}`);
-  shell.exec(`pulumi destroy --config-file ${configPath}`);
-  shell.exec(`pulumi stack rm ${stackName}`);
+  await process.exec('pulumi', ['stack select', `${stackName}`]);
+  await process.exec('pulumi', ['destroy', '--config-file', `${configPath}`]);
+  await process.exec('pulumi', ['stack rm', `${stackName}`]);
   core.info("Job finished");
 }
 
