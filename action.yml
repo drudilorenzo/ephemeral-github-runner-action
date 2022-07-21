@@ -1,13 +1,69 @@
-name: 'Wait'
-description: 'Wait a designated number of milliseconds'
+name: 'Create/destroy runners'
+description: 'Github action to create and destroy Runners'
 inputs:
-  milliseconds:  # id of input
-    description: 'number of milliseconds to wait'
+  pulumi-config-path: 
+    description: 'A path to your Pulumi project config file'
     required: true
-    default: '1000'
-outputs:
-  time: # output will be available to future steps
-    description: 'The current time after waiting'
+    default: ''
+  pulumi-goal:  
+    description: 'The name of the Pulumi goal. Supported values: create, destroy'
+    required: true
+    default: ''
+  pulumi-stack-name:
+    description: 'The name of the Pulumi stack.'
+    required: true
+    default: ''
+  pulumi-cloud-provider:
+    description: 'The name of the Pulumi cloud provider.' 
+    required: true
+    default: ''
+  pulumi-config-passphrase:
+    description: 'The passphrase that Pulumi will use to encrypt secrets'
+    required: true
+  cloud-architecture: 
+    description: 'Supported architecture names: amd64 or arm64' 
+    required: true
+    default: ''
+  pulumi-backend-url:
+    description: 'The url of the pulumi backend, e.g. 's3://bucket_name''
+    required: true
+    default: ''
+  github-app-id:
+    description: 'The ID of the app linked to you repo (see main repo docs for a better explanation)'
+    required: true
+    default: ''
+  github-app-private-key:
+    description: 'The private key of the app linked to you repo (see main repo docs for a better explanation)'
+    required: true
+    default: ''
+  aws-access-key-id:
+    description: 'An access key id linked to you AWS account'
+    required: false
+    default: ''
+  aws-secret-access-key:
+    description: 'The secret access key of aws key id you have insert'
+    required: false
+    default: ''
+  aws-region:
+    description: 'The AWS region you want to use, eg. eu-west-2'
+    required: false
+    default: 'eu-west-2'
+  google-credentials:
+    description: 'Google cloud services credentials'
+    required: false
+    default: ''
+  google-project:
+    description: 'GCP project ID'
+    required: false
+    default: ''
+  google-region:
+    description: 'Google region to use e.g. europe-west4'
+    required: false
+    default: ''
+  google-zone:
+    description: 'Google zone to use e.g. europe-west4-a'
+    required: false
+    default: ''
 runs:
   using: 'node16'
   main: 'dist/index.js'
