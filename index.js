@@ -55,7 +55,7 @@ async function run() {
 
   // shell.env["PULUMI_ACCESS_TOKEN"]=pulumiAccessToken;
 
-  await exec.exec('printenv', { cwd: repoPath });
+  await exec.exec('printenv');
   await exec.exec('pulumi', ['login', `${pulumiBackendUrl}`], { cwd: repoPath });
   core.info("Deploying the runners...");
   const providerPath = repoPath + cloudProvider;
