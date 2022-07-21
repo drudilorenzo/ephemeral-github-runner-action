@@ -1,6 +1,7 @@
 const core = require('@actions/core'); 
 const wait = require('./wait');
 const exec = require('@actions/exec');
+const io = require('@actions/io');
 
 async function run() {
   // Get all the inputs needed

@@ -27,6 +27,7 @@
   "dependencies": {
     "@actions/core": "^1.2.5",
     "@actions/exec": "^1.1.1",
+    "@actions/io": "^1.1.2",
     "shelljs": "^0.8.5"
   },
   "devDependencies": {
