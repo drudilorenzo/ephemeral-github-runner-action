@@ -58,7 +58,7 @@ async function run() {
   await exec.exec('printenv');
   await exec.exec('pulumi', ['login', `${pulumiBackendUrl}`], { cwd: repoPath });
   core.info("Deploying the runners...");
-  const providerPath = repoPath + cloudProvider;
+  const providerPath = repoPath + "/"+ cloudProvider;
   await exec.exec('pulumi', ['stack init', `${stackName}`, '--secrets-provider=passphrase'], { cwd: providerPath });
   await exec.exec('pulumi', ['stack select', `${stackName}`], { cwd: providerPath });
   await exec.exec('pulumi', ['stack ls'], { cwd: providerPath });
