@@ -25,7 +25,7 @@ inputs:
     required: true
     default: ''
   pulumi-backend-url:
-    description: 'The url of the pulumi backend, e.g. 's3://bucket_name''
+    description: 'The url of the pulumi backend'
     required: true
     default: ''
   github-app-id:
