@@ -59,7 +59,7 @@ async function run() {
   await exec.exec('printenv');
   await exec.exec('pulumi', ['login', `${pulumiBackendUrl}`]);
   core.info("Deploying the runners...");
-  await exec.exec('cd', [`${repoName}`]);
+  await exec.exec(`cd ${repoName}`);
   await process.exec('pulumi', ['stack init', `${stackName}`, '--secrets-provider=passphrase']);
   await process.exec('pulumi', ['stack select', `${stackName}`]);
   await process.exec('pulumi', ['stack ls']);
