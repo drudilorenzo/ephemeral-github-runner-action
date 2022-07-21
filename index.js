@@ -13,7 +13,7 @@ async function run() {
   const appID=core.getInput('app-id'); 
   const appPrivateKey = core.getInput('app-private-key');
   const pulumiConfigPassphrase = core.getInput('pulumi-config-passphrase');
-  const awsAccessKey = core.getInput('aws-access-key');
+  const awsAccessKey = core.getInput('aws-access-key-id');
   const awsSecretAccessKey = core.getInput('aws-secret-access-key');
   const awsRegion = core.getInput('aws-region');
   // const pulumiAccessToken = core.getInput('pulumi-access-token');
@@ -52,6 +52,7 @@ async function run() {
   process.env.PULUMI_SKIP_UPDATE_CHECK="true";
   process.env.PULUMI_SKIP_CONFIRMATIONS="true";
   process.env.PULUMI_CREDENTIALS_PATH="/home/runner/.pulumi";
+  process.env.CI="false";
 
   // shell.env["PULUMI_ACCESS_TOKEN"]=pulumiAccessToken;
 
