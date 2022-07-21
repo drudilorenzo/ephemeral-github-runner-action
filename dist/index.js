@@ -3036,8 +3036,8 @@ async function run() {
   const cloudProvider = core.getInput('pulumi-cloud-provider');
   const pulumiBackendUrl = core.getInput('pulumi-backend-url');
   const cloudArch = core.getInput('cloud-architecture');
-  const appID=core.getInput('app-id'); 
-  const appPrivateKey = core.getInput('app-private-key');
+  const appID=core.getInput('github-app-id'); 
+  const appPrivateKey = core.getInput('github-app-private-key');
   const pulumiConfigPassphrase = core.getInput('pulumi-config-passphrase');
   const awsAccessKey = core.getInput('aws-access-key-id');
   const awsSecretAccessKey = core.getInput('aws-secret-access-key');
@@ -3082,7 +3082,7 @@ async function run() {
   process.env.CI="false";
 
   await exec.exec('printenv');
-  
+
   core.info("Deploying the runners...");
   await exec.exec('pulumi', ['login', `${pulumiBackendUrl}`], { cwd: repoPath });
   const providerPath = repoPath + "/"+ cloudProvider;
