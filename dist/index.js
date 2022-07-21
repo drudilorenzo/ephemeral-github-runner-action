@@ -2822,6 +2822,42 @@ exports.debug = debug; // for test
 
 /***/ }),
 
+/***/ 860:
+/***/ ((module) => {
+
+const architectures = {
+    Arm64: "arm64",
+    Amd64: "amd64"
+}
+
+module.exports = architectures;
+
+/***/ }),
+
+/***/ 126:
+/***/ ((module) => {
+
+const providers = {
+    Aws: "aws",
+    Gcp: "gcp"
+}
+
+module.exports = providers;
+
+/***/ }),
+
+/***/ 767:
+/***/ ((module) => {
+
+const pulumiGoals = {
+    Create: "create",
+    Destroy: "destroy"
+}
+
+module.exports = pulumiGoals;
+
+/***/ }),
+
 /***/ 258:
 /***/ ((module) => {
 
@@ -2985,8 +3021,12 @@ var __webpack_exports__ = {};
 // This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
 (() => {
 const core = __nccwpck_require__(186); 
-const wait = __nccwpck_require__(258);
 const exec = __nccwpck_require__(514);
+
+const wait = __nccwpck_require__(258);
+const providers = __nccwpck_require__(126);
+const architectures = __nccwpck_require__(860);
+const pulumiGoals = __nccwpck_require__(767);
 
 async function run() {
   // Get all the inputs needed
@@ -3002,19 +3042,19 @@ async function run() {
   const awsAccessKey = core.getInput('aws-access-key-id');
   const awsSecretAccessKey = core.getInput('aws-secret-access-key');
   const awsRegion = core.getInput('aws-region');
-  // const pulumiAccessToken = core.getInput('pulumi-access-token');
 
   console.log(`Path: ${configPath} ${pulumiGoal} ${stackName} ${cloudProvider} ${cloudArch}`);
 
   // Simple check on provider and arch, we don't support gcp with an arm64 arch
-  // TODO: use enumerated values
   core.info("Checking the inputs...");
-  if (!(cloudProvider.toLowerCase() == 'aws' || cloudProvider.toLowerCase() == 'gcp')) {
+  if (!Object.values(providers).includes(cloudProvider.toLowerCase())) {
     core.setFailed("Wrong provider");
-  } else if (!(cloudArch.toLowerCase() == 'arm64' || cloudArch.toLowerCase() == 'amd64')) {
+  } else if (!Object.values(architectures).includes(cloudArch.toLowerCase())) {
     core.setFailed("Wrong arch");
   } else if (cloudProvider.toLowerCase() == 'gcp' && cloudArch.toLowerCase() == 'arm64') {
-    core.setFailed("GCP doesn't have arm machines");
+    core.setFailed("Don't support gcp arm64 machines");
+  } else if (!Object.values(pulumiGoals).includes(pulumiGoal.toLowerCase())) {
+    core.setFailed("Wrong arch");
   }
   core.info("Check passed!");
 
@@ -3036,15 +3076,15 @@ async function run() {
   process.env.AWS_REGION=awsRegion;
   // Skip the update check 
   process.env.PULUMI_SKIP_UPDATE_CHECK="true";
+  // Skip the pulumi confirmations
   process.env.PULUMI_SKIP_CONFIRMATIONS="true";
   process.env.PULUMI_CREDENTIALS_PATH="/home/runner/.pulumi";
   process.env.CI="false";
 
-  // shell.env["PULUMI_ACCESS_TOKEN"]=pulumiAccessToken;
-
   await exec.exec('printenv');
-  await exec.exec('pulumi', ['login', `${pulumiBackendUrl}`], { cwd: repoPath });
+  
   core.info("Deploying the runners...");
+  await exec.exec('pulumi', ['login', `${pulumiBackendUrl}`], { cwd: repoPath });
   const providerPath = repoPath + "/"+ cloudProvider;
   await exec.exec('pulumi', ['stack', 'init', `${stackName}`, '--secrets-provider=passphrase'], { cwd: providerPath });
   await exec.exec('pulumi', ['stack', 'select', `${stackName}`], { cwd: providerPath });

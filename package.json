@@ -1,7 +1,7 @@
 {
-  "name": "javascript-action",
+  "name": "ephemeral-github-runner-action",
   "version": "1.0.0",
-  "description": "JavaScript Action Template",
+  "description": "Javascript github action to deploy and destroy self-hosted runners.",
   "main": "index.js",
   "scripts": {
     "lint": "eslint .",
@@ -11,24 +11,25 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/actions/javascript-action.git"
+    "url": "https://github.com/LorenzoDrudi/ephemeral-github-runner-action"
   },
   "keywords": [
     "GitHub",
     "Actions",
-    "JavaScript"
+    "JavaScript",
+    "Pulumi",
+    "DevOps",
+    "Runners"
   ],
   "author": "",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/actions/javascript-action/issues"
+    "url": "https://github.com/LorenzoDrudi/ephemeral-github-runner-action/issues"
   },
-  "homepage": "https://github.com/actions/javascript-action#readme",
+  "homepage": "https://github.com/LorenzoDrudi/ephemeral-github-runner-action/blob/main/README.md",
   "dependencies": {
     "@actions/core": "^1.2.5",
-    "@actions/exec": "^1.1.1",
-    "@actions/io": "^1.1.2",
-    "shelljs": "^0.8.5"
+    "@actions/exec": "^1.1.1"
   },
   "devDependencies": {
     "@vercel/ncc": "^0.31.1",

@@ -1,6 +1,10 @@
 const core = require('@actions/core'); 
-const wait = require('./wait');
 const exec = require('@actions/exec');
+
+const wait = require('./wait');
+const providers = require('./utilities/providers');
+const architectures = require('./utilities/architectures');
+const pulumiGoals = require('./utilities/pulumiGoals');
 
 async function run() {
   // Get all the inputs needed
@@ -16,19 +20,19 @@ async function run() {
   const awsAccessKey = core.getInput('aws-access-key-id');
   const awsSecretAccessKey = core.getInput('aws-secret-access-key');
   const awsRegion = core.getInput('aws-region');
-  // const pulumiAccessToken = core.getInput('pulumi-access-token');
 
   console.log(`Path: ${configPath} ${pulumiGoal} ${stackName} ${cloudProvider} ${cloudArch}`);
 
   // Simple check on provider and arch, we don't support gcp with an arm64 arch
-  // TODO: use enumerated values
   core.info("Checking the inputs...");
-  if (!(cloudProvider.toLowerCase() == 'aws' || cloudProvider.toLowerCase() == 'gcp')) {
+  if (!Object.values(providers).includes(cloudProvider.toLowerCase())) {
     core.setFailed("Wrong provider");
-  } else if (!(cloudArch.toLowerCase() == 'arm64' || cloudArch.toLowerCase() == 'amd64')) {
+  } else if (!Object.values(architectures).includes(cloudArch.toLowerCase())) {
     core.setFailed("Wrong arch");
   } else if (cloudProvider.toLowerCase() == 'gcp' && cloudArch.toLowerCase() == 'arm64') {
-    core.setFailed("GCP doesn't have arm machines");
+    core.setFailed("Don't support gcp arm64 machines");
+  } else if (!Object.values(pulumiGoals).includes(pulumiGoal.toLowerCase())) {
+    core.setFailed("Wrong arch");
   }
   core.info("Check passed!");
 
@@ -50,15 +54,15 @@ async function run() {
   process.env.AWS_REGION=awsRegion;
   // Skip the update check 
   process.env.PULUMI_SKIP_UPDATE_CHECK="true";
+  // Skip the pulumi confirmations
   process.env.PULUMI_SKIP_CONFIRMATIONS="true";
   process.env.PULUMI_CREDENTIALS_PATH="/home/runner/.pulumi";
   process.env.CI="false";
 
-  // shell.env["PULUMI_ACCESS_TOKEN"]=pulumiAccessToken;
-
   await exec.exec('printenv');
-  await exec.exec('pulumi', ['login', `${pulumiBackendUrl}`], { cwd: repoPath });
+  
   core.info("Deploying the runners...");
+  await exec.exec('pulumi', ['login', `${pulumiBackendUrl}`], { cwd: repoPath });
   const providerPath = repoPath + "/"+ cloudProvider;
   await exec.exec('pulumi', ['stack', 'init', `${stackName}`, '--secrets-provider=passphrase'], { cwd: providerPath });
   await exec.exec('pulumi', ['stack', 'select', `${stackName}`], { cwd: providerPath });
