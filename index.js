@@ -59,19 +59,19 @@ async function run() {
   await exec.exec('pulumi', ['login', `${pulumiBackendUrl}`], { cwd: repoPath });
   core.info("Deploying the runners...");
   const providerPath = repoPath + cloudProvider;
-  await process.exec('pulumi', ['stack init', `${stackName}`, '--secrets-provider=passphrase'], { cwd: providerPath });
-  await process.exec('pulumi', ['stack select', `${stackName}`], { cwd: providerPath });
-  await process.exec('pulumi', ['stack ls'], { cwd: providerPath });
-  await process.exec('pulumi', ['update', '--diff', '--config-file', `${configPath}`], { cwd: providerPath });
+  await exec.exec('pulumi', ['stack init', `${stackName}`, '--secrets-provider=passphrase'], { cwd: providerPath });
+  await exec.exec('pulumi', ['stack select', `${stackName}`], { cwd: providerPath });
+  await exec.exec('pulumi', ['stack ls'], { cwd: providerPath });
+  await exec.exec('pulumi', ['update', '--diff', '--config-file', `${configPath}`], { cwd: providerPath });
   core.info("Runners deployed!");
 
   core.info("Waiting some time");
   await wait(1000);  
 
   core.info("Destroying the runners");
-  await process.exec('pulumi', ['stack select', `${stackName}`], { cwd: providerPath });
-  await process.exec('pulumi', ['destroy', '--config-file', `${configPath}`], { cwd: providerPath });
-  await process.exec('pulumi', ['stack rm', `${stackName}`], { cwd: providerPath });
+  await exec.exec('pulumi', ['stack select', `${stackName}`], { cwd: providerPath });
+  await exec.exec('pulumi', ['destroy', '--config-file', `${configPath}`], { cwd: providerPath });
+  await exec.exec('pulumi', ['stack rm', `${stackName}`], { cwd: providerPath });
   core.info("Job finished");
 }
 
