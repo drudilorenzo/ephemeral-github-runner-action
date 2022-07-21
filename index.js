@@ -1,7 +1,6 @@
 const core = require('@actions/core'); 
 const wait = require('./wait');
 const exec = require('@actions/exec');
-const io = require('@actions/io');
 
 async function run() {
   // Get all the inputs needed
@@ -37,9 +36,8 @@ async function run() {
   core.info("Cloning the repo and installing the dependencies...");
   const runnersRepoUrl = "https://github.com/pavlovic-ivan/ephemeral-github-runner.git";
   await exec.exec('git', ['clone', `${runnersRepoUrl}`]);
-  const repoName = "ephemeral-github-runner";
-  await exec.exec(`cd ${repoName}`);
-  await exec.exec('npm', ['ci']);
+  const repoPath = "ephemeral-github-runner";
+  await exec.exec('npm', ['ci'],  { cwd: repoPath });
 
   // Export the env variable we need in our environment
   core.info("Setting up env variables...");
@@ -57,23 +55,23 @@ async function run() {
 
   // shell.env["PULUMI_ACCESS_TOKEN"]=pulumiAccessToken;
 
-  await exec.exec('printenv');
-  await exec.exec('pulumi', ['login', `${pulumiBackendUrl}`]);
+  await exec.exec('printenv', { cwd: repoPath });
+  await exec.exec('pulumi', ['login', `${pulumiBackendUrl}`], { cwd: repoPath });
   core.info("Deploying the runners...");
-  await exec.exec('cd', [`${cloudProvider}`]);
-  await process.exec('pulumi', ['stack init', `${stackName}`, '--secrets-provider=passphrase']);
-  await process.exec('pulumi', ['stack select', `${stackName}`]);
-  await process.exec('pulumi', ['stack ls']);
-  await process.exec('pulumi', ['update', '--diff', '--config-file', `${configPath}`]);
+  const providerPath = repoPath + cloudProvider;
+  await process.exec('pulumi', ['stack init', `${stackName}`, '--secrets-provider=passphrase'], { cwd: providerPath });
+  await process.exec('pulumi', ['stack select', `${stackName}`], { cwd: providerPath });
+  await process.exec('pulumi', ['stack ls'], { cwd: providerPath });
+  await process.exec('pulumi', ['update', '--diff', '--config-file', `${configPath}`], { cwd: providerPath });
   core.info("Runners deployed!");
 
   core.info("Waiting some time");
   await wait(1000);  
 
   core.info("Destroying the runners");
-  await process.exec('pulumi', ['stack select', `${stackName}`]);
-  await process.exec('pulumi', ['destroy', '--config-file', `${configPath}`]);
-  await process.exec('pulumi', ['stack rm', `${stackName}`]);
+  await process.exec('pulumi', ['stack select', `${stackName}`], { cwd: providerPath });
+  await process.exec('pulumi', ['destroy', '--config-file', `${configPath}`], { cwd: providerPath });
+  await process.exec('pulumi', ['stack rm', `${stackName}`], { cwd: providerPath });
   core.info("Job finished");
 }
 
