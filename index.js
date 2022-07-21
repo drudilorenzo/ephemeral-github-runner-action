@@ -37,7 +37,7 @@ async function run() {
   const runnersRepoUrl = "https://github.com/pavlovic-ivan/ephemeral-github-runner.git";
   await exec.exec('git', ['clone', `${runnersRepoUrl}`]);
   const repoName = "ephemeral-github-runner";
-  await exec.exec('cd', [`${repoName}`]);
+  await exec.exec(`cd ${repoName}`);
   await exec.exec('npm', ['ci']);
 
   // Export the env variable we need in our environment
@@ -59,7 +59,7 @@ async function run() {
   await exec.exec('printenv');
   await exec.exec('pulumi', ['login', `${pulumiBackendUrl}`]);
   core.info("Deploying the runners...");
-  await exec.exec(`cd ${repoName}`);
+  await exec.exec('cd', [`${cloudProvider}`]);
   await process.exec('pulumi', ['stack init', `${stackName}`, '--secrets-provider=passphrase']);
   await process.exec('pulumi', ['stack select', `${stackName}`]);
   await process.exec('pulumi', ['stack ls']);
