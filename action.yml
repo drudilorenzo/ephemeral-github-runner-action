@@ -14,14 +14,14 @@ inputs:
     required: true
     default: ''
   pulumi-cloud-provider:
-    description: 'The name of the Pulumi cloud provider.' 
+    description: 'The name of the Pulumi cloud provider. Supported providers: aws, gcp' 
     required: true
     default: ''
   pulumi-config-passphrase:
     description: 'The passphrase that Pulumi will use to encrypt secrets'
     required: true
   cloud-architecture: 
-    description: 'Supported architecture names: amd64 or arm64' 
+    description: 'Supported architecture names: amd64 or arm64 (no support for gcp + arm64)' 
     required: true
     default: ''
   pulumi-backend-url:
