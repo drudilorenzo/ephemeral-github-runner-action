@@ -5,7 +5,7 @@ const wait = require('./wait');
 
 const providers = require('./providers');
 const architectures = require('./architectures');
-const pulumiGoals = require('./goals');
+const pulumiGoals = require('./pulumiGoals');
 // const deployRunners = require('./deployRunners');
 // const destroyRunners = require('./destroyRunners');
 
@@ -34,7 +34,7 @@ async function run() {
     core.setFailed("Wrong arch");
   } else if (config.cloudProvider.toLowerCase() == providers.Gcp && config.cloudArch.toLowerCase() == architectures.Arm64) {
     core.setFailed("Don't support gcp arm64 machines");
-  } else if (!Object.values(pulumiGoals).includes(config.pulumiGoal.toLowerCase())) {
+  } else if (!Object.values(pulumiGoals.goals).includes(config.pulumiGoal.toLowerCase())) {
     core.setFailed("Wrong goal");
   }
   core.info("Check passed!");

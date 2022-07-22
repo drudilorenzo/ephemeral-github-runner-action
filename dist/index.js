@@ -2846,6 +2846,42 @@ module.exports = providers;
 
 /***/ }),
 
+/***/ 687:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+const core = __nccwpck_require__(186); 
+const exec = __nccwpck_require__(514);
+
+const goals = {
+    Create: "create",
+    Destroy: "destroy"
+}
+
+async function deployRunners(config) {
+    core.info("Deploying the runners...");
+    await exec.exec('pulumi', ['login', `${config.pulumiBackendUrl}`], { cwd: config.repoPath });
+    await exec.exec('pulumi', ['stack', 'init', `${config.stackName}`, '--secrets-provider=passphrase'], { cwd: config.providerPath });
+    await exec.exec('pulumi', ['stack', 'select', `${config.stackName}`], { cwd: config.providerPath });
+    await exec.exec('pulumi', ['stack', 'ls'], { cwd: config.providerPath });
+    await exec.exec('pulumi', ['update', '--diff', '--config-file', `${config.configPath}`], { cwd: config.providerPath });
+    core.info("Runners deployed!");
+}
+  
+  async function destroyRunners(config) {
+    core.info("Destroying the runners");
+    await exec.exec('pulumi', ['login', `${config.pulumiBackendUrl}`], { cwd: config.repoPath });
+    await exec.exec('pulumi', ['stack', 'select', `${config.stackName}`], { cwd: config.providerPath });
+    await exec.exec('pulumi', ['destroy', '--config-file', `${config.configPath}`], { cwd: config.providerPath });
+    await exec.exec('pulumi', ['stack', 'rm', `${config.stackName}`], { cwd: config.providerPath });
+    core.info("Job finished");
+}
+
+module.exports = goals;
+module.exports = deployRunners;
+module.exports = destroyRunners;
+
+/***/ }),
+
 /***/ 312:
 /***/ ((module) => {
 
@@ -2859,14 +2895,6 @@ let wait = function (milliseconds) {
 };
 
 module.exports = wait;
-
-
-/***/ }),
-
-/***/ 983:
-/***/ ((module) => {
-
-module.exports = eval("require")("./goals");
 
 
 /***/ }),
@@ -3023,7 +3051,7 @@ const wait = __nccwpck_require__(312);
 
 const providers = __nccwpck_require__(842);
 const architectures = __nccwpck_require__(811);
-const pulumiGoals = __nccwpck_require__(983);
+const pulumiGoals = __nccwpck_require__(687);
 // const deployRunners = require('./deployRunners');
 // const destroyRunners = require('./destroyRunners');
 
@@ -3052,7 +3080,7 @@ async function run() {
     core.setFailed("Wrong arch");
   } else if (config.cloudProvider.toLowerCase() == providers.Gcp && config.cloudArch.toLowerCase() == architectures.Arm64) {
     core.setFailed("Don't support gcp arm64 machines");
-  } else if (!Object.values(pulumiGoals).includes(config.pulumiGoal.toLowerCase())) {
+  } else if (!Object.values(pulumiGoals.goals).includes(config.pulumiGoal.toLowerCase())) {
     core.setFailed("Wrong goal");
   }
   core.info("Check passed!");
