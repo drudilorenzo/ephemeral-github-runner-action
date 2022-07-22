@@ -3078,7 +3078,7 @@ async function run() {
     core.setFailed("Wrong provider");
   } else if (!Object.values(architectures).includes(config.cloudArch.toLowerCase())) {
     core.setFailed("Wrong arch");
-  } else if (config.cloudProvider.toLowerCase() == providers.Aws && config.cloudArch.toLowerCase() == architectures.Arm64) {
+  } else if (config.cloudProvider.toLowerCase() == providers.Gcp && config.cloudArch.toLowerCase() == architectures.Arm64) {
     core.setFailed("Don't support gcp arm64 machines");
   } else if (!Object.values(pulumiGoals).includes(config.pulumiGoal.toLowerCase())) {
     core.setFailed("Wrong arch");
@@ -3129,7 +3129,7 @@ async function run() {
   // Skip the pulumi confirmations
   process.env.PULUMI_SKIP_CONFIRMATIONS = "true";
   // Look at that
-  process.env.PULUMI_CREDENTIALS_PATH = "/home/runner/.pulumi";
+  // process.env.PULUMI_CREDENTIALS_PATH = "/home/runner/.pulumi";
   process.env.CI = "false";
 
   await exec.exec('printenv');
