@@ -2822,30 +2822,6 @@ exports.debug = debug; // for test
 
 /***/ }),
 
-/***/ 811:
-/***/ ((module) => {
-
-const architectures = {
-    Arm64: "arm64",
-    Amd64: "amd64"
-}
-
-module.exports = architectures;
-
-/***/ }),
-
-/***/ 842:
-/***/ ((module) => {
-
-const providers = {
-    Aws: "aws",
-    Gcp: "gcp"
-}
-
-module.exports = providers;
-
-/***/ }),
-
 /***/ 312:
 /***/ ((module) => {
 
@@ -2863,10 +2839,26 @@ module.exports = wait;
 
 /***/ }),
 
-/***/ 983:
+/***/ 740:
 /***/ ((module) => {
 
-module.exports = eval("require")("./goals");
+module.exports = eval("require")("./src/architectures");
+
+
+/***/ }),
+
+/***/ 504:
+/***/ ((module) => {
+
+module.exports = eval("require")("./src/goals");
+
+
+/***/ }),
+
+/***/ 65:
+/***/ ((module) => {
+
+module.exports = eval("require")("./src/providers");
 
 
 /***/ }),
@@ -3021,9 +3013,9 @@ const exec = __nccwpck_require__(514);
 
 const wait = __nccwpck_require__(312);
 
-const providers = __nccwpck_require__(842);
-const architectures = __nccwpck_require__(811);
-const pulumiGoals = __nccwpck_require__(983);
+const providers = __nccwpck_require__(65);
+const architectures = __nccwpck_require__(740);
+const pulumiGoals = __nccwpck_require__(504);
 // const deployRunners = require('./src/deployRunners');
 // const destroyRunners = require('./src/destroyRunners');
 

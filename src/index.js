@@ -3,9 +3,9 @@ const exec = require('@actions/exec');
 
 const wait = require('./wait');
 
-const providers = require('./providers');
-const architectures = require('./architectures');
-const pulumiGoals = require('./goals');
+const providers = require('./src/providers');
+const architectures = require('./src/architectures');
+const pulumiGoals = require('./src/goals');
 // const deployRunners = require('./src/deployRunners');
 // const destroyRunners = require('./src/destroyRunners');
 
