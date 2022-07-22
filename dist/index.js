@@ -2852,7 +2852,7 @@ module.exports = providers;
 const core = __nccwpck_require__(186); 
 const exec = __nccwpck_require__(514);
 
-const goals = {
+const pulumiGoals = {
     Create: "create",
     Destroy: "destroy"
 }
@@ -2876,9 +2876,10 @@ async function deployRunners(config) {
     core.info("Job finished");
 }
 
-module.exports = goals;
-module.exports = deployRunners;
-module.exports = destroyRunners;
+module.exports = {
+    pulumiGoals, 
+    deployRunners,
+    destroyRunners};
 
 /***/ }),
 
@@ -3071,6 +3072,7 @@ async function run() {
   console.log(`Path: ${config.configPath} ${config.pulumiGoal} ${config.stackName} 
       ${config.cloudProvider} ${config.cloudArch}`);
 
+  core.info(pulumiGoals);
   // Simple check on provider, arch and goal.
   // There's no support for arm64 machine on gcp.
   core.info("Checking the inputs...");
@@ -3080,7 +3082,7 @@ async function run() {
     core.setFailed("Wrong arch");
   } else if (config.cloudProvider.toLowerCase() == providers.Gcp && config.cloudArch.toLowerCase() == architectures.Arm64) {
     core.setFailed("Don't support gcp arm64 machines");
-  } else if (!Object.values(pulumiGoals.goals).includes(config.pulumiGoal.toLowerCase())) {
+  } else if (!Object.values(pulumiGoals.pulumiGoals).includes(config.pulumiGoal.toLowerCase())) {
     core.setFailed("Wrong goal");
   }
   core.info("Check passed!");

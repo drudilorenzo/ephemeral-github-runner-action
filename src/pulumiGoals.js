@@ -1,7 +1,7 @@
 const core = require('@actions/core'); 
 const exec = require('@actions/exec');
 
-const goals = {
+const pulumiGoals = {
     Create: "create",
     Destroy: "destroy"
 }
@@ -25,6 +25,7 @@ async function deployRunners(config) {
     core.info("Job finished");
 }
 
-module.exports = goals;
-module.exports = deployRunners;
-module.exports = destroyRunners;
+module.exports = {
+    pulumiGoals, 
+    deployRunners,
+    destroyRunners};
