@@ -35,6 +35,8 @@ async function run() {
   } else if (config.cloudProvider.toLowerCase() == providers.Gcp && config.cloudArch.toLowerCase() == architectures.Arm64) {
     core.setFailed("Don't support gcp arm64 machines");
   } else if (!Object.values(pulumiGoals).includes(config.pulumiGoal.toLowerCase())) {
+    core.info(config.pulumiGoal)
+    core.info(pulumiGoals.toString())
     core.setFailed("Wrong goal");
   }
   core.info("Check passed!");
