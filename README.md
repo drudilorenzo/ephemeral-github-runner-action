@@ -68,6 +68,10 @@ You can now consume the action by referencing the v1 branch
       aws-access-key-id: 'Aws access key id'
       aws-secret-access-key: 'Aws secret access key'
       aws-region: 'Aws region'
+      google-credentials: 'Google cloud services credentials'
+      google-project: 'GCP project ID'
+      google-region: 'Google region'
+      google-zone: 'Google zone'
 ```
 
 
