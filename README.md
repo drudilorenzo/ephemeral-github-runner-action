@@ -51,7 +51,7 @@ Your action is now published!
 
 ## Usage
 
-You can now consume the action by referencing the v1 branch
+You can now consume the action by referencing the v1 branch.
 
 ```yaml
  - uses: LorenzoDrudi/ephemeral-github-runner-action@refactoring
@@ -73,5 +73,9 @@ You can now consume the action by referencing the v1 branch
       google-region: 'Google region'
       google-zone: 'Google zone'
 ```
+## Important
+
+The workflow will fail if the cloud architecture == arm64 and the pulumi cloud provider == GCP. 
+
 
 
