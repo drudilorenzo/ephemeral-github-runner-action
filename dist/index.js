@@ -3081,7 +3081,7 @@ async function run() {
   } else if (config.cloudProvider.toLowerCase() == providers.Gcp && config.cloudArch.toLowerCase() == architectures.Arm64) {
     core.setFailed("Don't support gcp arm64 machines");
   } else if (!Object.values(pulumiGoals).includes(config.pulumiGoal.toLowerCase())) {
-    core.setFailed("Wrong arch");
+    core.setFailed("Wrong goal");
   }
   core.info("Check passed!");
 
@@ -3128,8 +3128,7 @@ async function run() {
   process.env.PULUMI_SKIP_UPDATE_CHECK = "true";
   // Skip the pulumi confirmations
   process.env.PULUMI_SKIP_CONFIRMATIONS = "true";
-  // Look at that
-  // process.env.PULUMI_CREDENTIALS_PATH = "/home/runner/.pulumi";
+  // Set CI to false to disable non-interactive mode. 
   process.env.CI = "false";
 
   await exec.exec('printenv');
