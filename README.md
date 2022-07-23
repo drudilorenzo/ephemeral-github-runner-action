@@ -79,9 +79,7 @@ The workflow will fail if the cloud architecture == arm64 and the pulumi cloud p
 
 ## References
 
-```
 Generated from: [JavaScript-Action](https://github.com/actions/javascript-action)
 
 To learn how to create a simple action, start here: [Hello-World-Javascript-Action](https://github.com/actions/hello-world-javascript-action)
 
-```
