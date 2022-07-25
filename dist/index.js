@@ -10638,13 +10638,13 @@ async function run() {
     throw new Error("Wrong provider");
   } else if (!Object.values(architectures.architectures).includes(config.cloudArch.toLowerCase())) {
     throw new Error("Wrong arch");
-  } else if (config.cloudProvider.toLowerCase() == providers.Gcp && config.cloudArch.toLowerCase() == architectures.Arm64) {
+  } else if (config.cloudProvider.toLowerCase() == providers.providers.Gcp && config.cloudArch.toLowerCase() == architectures.architectures.Arm64) {
     throw new Error("Don't support gcp arm64 machines");
   } else if (!Object.values(pulumiGoals.pulumiGoals).includes(config.pulumiGoal.toLowerCase())) {
     throw new Error("Wrong goal");
   }
   core.info("Check passed!");
-  core.info(pulumiGoals.Create)
+  core.info(pulumiGoals.pulumiGoals.Create)
 
   // Clone the runners repo and install the dependencies
   core.info("Cloning the repo and installing the dependencies...");
@@ -10684,10 +10684,10 @@ async function run() {
   core.info("Job finished");
 
   // switch (config.pulumiGoal.toLowerCase()) {
-  //   case pulumiGoals.Create:
+  //   case pulumiGoals.pulumiGoals.Create:
   //     await pulumiGoals.deployRunners(config);
   //     break;
-  //   case pulumiGoals.Destroy:
+  //   case pulumiGoals.pulumiGoals.Destroy:
   //     await pulumiGoals.destroyRunners(config);
   //     break;
   // }
