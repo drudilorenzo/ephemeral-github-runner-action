@@ -10598,8 +10598,9 @@ const architectures = __nccwpck_require__(4811);
 const pulumiGoals = __nccwpck_require__(5687);
 
 async function run() {
-  await exec.exec('pwd');
-  await exec.exec('ls');
+  await exec.exec('ls /home/runner/work/dummy-repo-devops/dummy-repo-devops');
+  await exec.exec('ls /home/runner/work/dummy-repo-devops/dummy-repo-devops');
+
   // Get all the inputs needed and construct a dictionary containing them.
   let config = {}
   config["configPath"] = "/home/runner/" + github.context.payload.repository.name 
