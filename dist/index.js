@@ -10640,11 +10640,10 @@ async function run() {
 
   // Simple check on provider, arch and goal.
   // There's no support for arm64 machine on gcp.
-  core.info(Object.values(providers).toString());
   core.info("Checking the inputs...");
-  if (!Object.values(providers).includes(config.cloudProvider.toLowerCase())) {
+  if (!Object.values(providers.providers).includes(config.cloudProvider.toLowerCase())) {
     core.setFailed("Wrong provider");
-  } else if (!Object.values(architectures).includes(config.cloudArch.toLowerCase())) {
+  } else if (!Object.values(architectures.architectures).includes(config.cloudArch.toLowerCase())) {
     core.setFailed("Wrong arch");
   } else if (config.cloudProvider.toLowerCase() == providers.Gcp && config.cloudArch.toLowerCase() == architectures.Arm64) {
     core.setFailed("Don't support gcp arm64 machines");
