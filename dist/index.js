@@ -10643,10 +10643,8 @@ async function run() {
   urlPrefix += "github.com/";
   const userRepoUrl = urlPrefix  + github.context.payload.repository.owner.login 
     + "/" + github.context.payload.repository.name;
-  core.info(userRepoUrl)
-  core.info(process.env.GITHUB_REPOSITORY)
   await exec.exec('git', ['clone', `${userRepoUrl}`]);
-
+  await exec.exec('pwd')
   // Export the env variable we need in our environment
   core.info("Setting up env variables...");
   switch (config.cloudProvider.toLowerCase()) {
