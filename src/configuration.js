@@ -18,6 +18,7 @@ async function setConfig() {
       "cloudProvider": core.getInput('pulumi-cloud-provider'),
       "cloudArch": core.getInput('cloud-architecture'),
       "githubAccessToken": core.getInput('github-access-token'),
+      "pulumiBackendUrl": core.getInput('pulumi-backend-url'),
       "providerPath": homeDirectory 
         + "/ephemeral-github-runner" + "/" 
         + core.getInput('pulumi-cloud-provider')
