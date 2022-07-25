@@ -10639,6 +10639,7 @@ async function run() {
 
   // Simple check on provider, arch and goal.
   // There's no support for arm64 machine on gcp.
+  core.info(Object.values(providers));
   core.info("Checking the inputs...");
   if (!Object.values(providers).includes(config.cloudProvider.toLowerCase())) {
     core.setFailed("Wrong provider");
