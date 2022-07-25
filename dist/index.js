@@ -10641,9 +10641,8 @@ async function run() {
      urlPrefix += githubToken + "@";
   } 
   urlPrefix += "github.com/";
-  core.info(github.context.payload)
-  const userRepoUrl = urlPrefix + github.context.payload.repository.owner + github.context.payload.repository.name;
-  core.info(userRepoUrl)
+  const userRepoUrl = urlPrefix  + github.context.payload.repository.name;
+  core.info(github.context.payload.repository)
   await exec.exec('git', ['clone', `${userRepoUrl}`]);
 
   // Export the env variable we need in our environment
