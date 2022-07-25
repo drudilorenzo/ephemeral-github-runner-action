@@ -16,9 +16,14 @@ async function run() {
 
   // Get all the inputs needed and construct a dictionary containing them.
   let config = {}
-  config["configPath"] = "/home/runner/" + github.context.payload.repository.name 
-    + "/" + core.getInput('pulumi-config-path');
-  core.info(config.configPath)
+  const homeDirectory = 
+  + github.context.payload.repository.name
+  + github.context.payload.repository.name;
+  config["configPath"] =
+  + homeDirectory 
+  + github.context.payload.repository.name 
+  + "/" 
+  + core.getInput('pulumi-config-path');
   config["pulumiGoal"] = core.getInput('pulumi-goal');
   config["stackName"] = core.getInput('pulumi-stack-name');
   config["cloudProvider"] = core.getInput('pulumi-cloud-provider');
