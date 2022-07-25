@@ -25,7 +25,7 @@ async function setConfig() {
       "pulumiConfigPassphrase": core.getInput('pulumi-config-passphrase'),
       "providerPath": config.runnerRepoPath + "/"+ config.cloudProvider
     };
-    
+
     switch (config.cloudProvider.toLowerCase()) {
       case providers.Aws:
         {
@@ -46,4 +46,4 @@ async function setConfig() {
     return config;
   }
 
-  module.exports = setConfig;
+  module.exports = { setConfig };
