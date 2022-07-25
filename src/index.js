@@ -1,4 +1,5 @@
-const core = require('@actions/core'); 
+const core = require('@actions/core');
+const github = require('@actions/github');
 const exec = require('@actions/exec');
 
 const wait = require('./wait');
@@ -6,8 +7,6 @@ const wait = require('./wait');
 const providers = require('./providers');
 const architectures = require('./architectures');
 const pulumiGoals = require('./pulumiGoals');
-// const deployRunners = require('./deployRunners');
-// const destroyRunners = require('./destroyRunners');
 
 async function run() {
   // Get all the inputs needed and construct a dictionary containing them.
@@ -22,10 +21,8 @@ async function run() {
   config["appPrivateKey"] = core.getInput('github-app-private-key');
   config["pulumiConfigPassphrase"] = core.getInput('pulumi-config-passphrase');
 
-  console.log(`Path: ${config.configPath} ${config.pulumiGoal} ${config.stackName} 
-      ${config.cloudProvider} ${config.cloudArch}`);
+  console.log(`Path: ${config.configPath} ${config.pulumiGoal} ${config.stackName} ${config.cloudProvider} ${config.cloudArch}`);
 
-  core.info(pulumiGoals);
   // Simple check on provider, arch and goal.
   // There's no support for arm64 machine on gcp.
   core.info("Checking the inputs...");
@@ -40,12 +37,24 @@ async function run() {
   }
   core.info("Check passed!");
 
-  // Clone the repo and install the dependencies
+  // Clone the runners repo and install the dependencies
   core.info("Cloning the repo and installing the dependencies...");
   const runnersRepoUrl = "https://github.com/pavlovic-ivan/ephemeral-github-runner.git";
   await exec.exec('git', ['clone', `${runnersRepoUrl}`]);
   config["repoPath"] = "ephemeral-github-runner";
   await exec.exec('npm', ['ci'],  { cwd: config.repoPath });
+
+  // Clone the repository which need the runners
+  // That's becaus we need  the config.yaml inside it.
+  const githubToken = core.getInput('github-access-token');
+  let urlPrefix = "https://";
+  if (githubToken !== '') {
+     urlPrefix += githubToken + "@";
+  } 
+  urlPrefix += "github.com/";
+  const userRepoUrl = urlPrefix + github.context.payload.repository.name;
+  core.info(userRepoUrl)
+  await exec.exec('git', ['clone', `${userRepoUrl}`]);
 
   // Export the env variable we need in our environment
   core.info("Setting up env variables...");
@@ -88,6 +97,7 @@ async function run() {
 
   await exec.exec('printenv');
 
+  // Execution flow for testing
   core.info("Deploying the runners...");
   await exec.exec('pulumi', ['login', `${config.pulumiBackendUrl}`], { cwd: config.repoPath });
   config["providerPath"] = config.repoPath + "/"+ config.cloudProvider;
@@ -108,10 +118,10 @@ async function run() {
 
   // switch (config.pulumiGoal.toLowerCase()) {
   //   case pulumiGoals.Create:
-  //     await deployRunners(config);
+  //     await pulumiGoals.deployRunners(config);
   //     break;
   //   case providers.Gcp:
-  //     await destroyRunners(config);
+  //     await pulumiGoals.destroyRunners(config);
   //     break;
   //   default:
   //     break;
