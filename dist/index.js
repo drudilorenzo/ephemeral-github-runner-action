@@ -10328,6 +10328,61 @@ module.exports = architectures;
 
 /***/ }),
 
+/***/ 516:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+const core = __nccwpck_require__(2186);
+const github = __nccwpck_require__(5438);
+const providers = __nccwpck_require__(8842);
+
+// Return a dictionary with all the config values.
+async function setConfig() {
+    const userRepoName = github.context.payload.repository.name;
+    const homeDirectory = "/home/runner/work/"
+      + userRepoName + "/"
+      + userRepoName;
+
+    const config = {
+      "configFilePath": homeDirectory + "/"
+                    + userRepoName + "/" 
+                    + core.getInput('pulumi-config-path'),
+      "runnerRepoPath": homeDirectory + "/ephemeral-github-runner",
+      "pulumiGoal": core.getInput('pulumi-goal'),
+      "stackName": core.getInput('pulumi-stack-name'),
+      "cloudProvider": core.getInput('pulumi-cloud-provider'),
+      "pulumiBackendUrl": core.getInput('pulumi-backend-url'),
+      "cloudArch": core.getInput('cloud-architecture'),
+      "githubAppID": core.getInput('github-app-id'),
+      "githubAppPrivateKey": core.getInput('github-app-private-key'),
+      "githubAccessToken": core.getInput('github-access-token'),
+      "pulumiConfigPassphrase": core.getInput('pulumi-config-passphrase'),
+      "providerPath": config.runnerRepoPath + "/"+ config.cloudProvider
+    };
+    
+    switch (config.cloudProvider.toLowerCase()) {
+      case providers.Aws:
+        {
+          config["awsAccessKey"] = core.getInput('aws-access-key-id');
+          config["awsSecretAccessKey"] = core.getInput('aws-secret-access-key');
+          config["awsRegion"] = core.getInput('aws-region');
+        }
+        break;
+      case providers.Gcp:
+        {
+          config["googleCredentials"] = core.getInput('google-credentials');
+          config["googleProject"] = core.getInput('google-project');
+          config["googleRegion"] = core.getInput('google-region');
+          config["googleZone"] = core.getInput('google-zone');
+        }
+        break;
+    }
+    return config;
+  }
+
+  module.exports = setConfig;
+
+/***/ }),
+
 /***/ 8842:
 /***/ ((module) => {
 
@@ -10353,19 +10408,19 @@ const pulumiGoals = {
 
 async function deployRunners(config) {
     core.info("Deploying the runners...");
-    await exec.exec('pulumi', ['login', `${config.pulumiBackendUrl}`], { cwd: config.repoPath });
+    await exec.exec('pulumi', ['login', `${config.pulumiBackendUrl}`], { cwd: config.runnerRepoPath });
     await exec.exec('pulumi', ['stack', 'init', `${config.stackName}`, '--secrets-provider=passphrase'], { cwd: config.providerPath });
     await exec.exec('pulumi', ['stack', 'select', `${config.stackName}`], { cwd: config.providerPath });
     await exec.exec('pulumi', ['stack', 'ls'], { cwd: config.providerPath });
-    await exec.exec('pulumi', ['update', '--diff', '--config-file', `${config.configPath}`], { cwd: config.providerPath });
+    await exec.exec('pulumi', ['update', '--diff', '--config-file', `${config.configFilePath}`], { cwd: config.providerPath });
     core.info("Runners deployed!");
 }
   
-  async function destroyRunners(config) {
+async function destroyRunners(config) {
     core.info("Destroying the runners");
-    await exec.exec('pulumi', ['login', `${config.pulumiBackendUrl}`], { cwd: config.repoPath });
+    await exec.exec('pulumi', ['login', `${config.pulumiBackendUrl}`], { cwd: config.runnerRepoPath });
     await exec.exec('pulumi', ['stack', 'select', `${config.stackName}`], { cwd: config.providerPath });
-    await exec.exec('pulumi', ['destroy', '--config-file', `${config.configPath}`], { cwd: config.providerPath });
+    await exec.exec('pulumi', ['destroy', '--config-file', `${config.configFilePath}`], { cwd: config.providerPath });
     await exec.exec('pulumi', ['stack', 'rm', `${config.stackName}`], { cwd: config.providerPath });
     core.info("Job finished");
 }
@@ -10590,36 +10645,17 @@ var __webpack_exports__ = {};
 const core = __nccwpck_require__(2186);
 const github = __nccwpck_require__(5438);
 const exec = __nccwpck_require__(1514);
-
 const wait = __nccwpck_require__(1312);
-
 const providers = __nccwpck_require__(8842);
 const architectures = __nccwpck_require__(4811);
 const pulumiGoals = __nccwpck_require__(5687);
+const configuration = __nccwpck_require__(516);
 
 async function run() {
   // Get all the inputs needed and construct a dictionary containing them.
-  let config = {}
-  const homeDirectory = "/home/runner/work/"
-  + github.context.payload.repository.name
-  + "/"
-  + github.context.payload.repository.name;
-  config["configPath"] =
-  homeDirectory 
-  + "/"
-  + github.context.payload.repository.name 
-  + "/" 
-  + core.getInput('pulumi-config-path');
-  config["pulumiGoal"] = core.getInput('pulumi-goal');
-  config["stackName"] = core.getInput('pulumi-stack-name');
-  config["cloudProvider"] = core.getInput('pulumi-cloud-provider');
-  config["pulumiBackendUrl"] = core.getInput('pulumi-backend-url');
-  config["cloudArch"] = core.getInput('cloud-architecture');
-  config["appID"] = core.getInput('github-app-id'); 
-  config["appPrivateKey"] = core.getInput('github-app-private-key');
-  config["pulumiConfigPassphrase"] = core.getInput('pulumi-config-passphrase');
+  let config = await configuration.setConfig();
 
-  console.log(`Path: ${config.configPath} ${config.pulumiGoal} ${config.stackName} ${config.cloudProvider} ${config.cloudArch}`);
+  console.log(`Path: ${config.configFilePath} ${config.pulumiGoal} ${config.stackName} ${config.cloudProvider} ${config.cloudArch}`);
 
   // Simple check on provider, arch and goal.
   // There's no support for arm64 machine on gcp.
@@ -10637,53 +10673,37 @@ async function run() {
 
   // Clone the runners repo and install the dependencies
   core.info("Cloning the repo and installing the dependencies...");
-  const runnersRepoUrl = "https://github.com/pavlovic-ivan/ephemeral-github-runner.git";
-  await exec.exec('git', ['clone', `${runnersRepoUrl}`]);
-  config["repoPath"] = "/home/runner/work/dummy-repo-devops/dummy-repo-devops/ephemeral-github-runner";
-  await exec.exec('npm', ['ci'],  { cwd: config.repoPath });
+  const runnerRepoUrl = "https://github.com/pavlovic-ivan/ephemeral-github-runner.git";
+  await exec.exec('git', ['clone', `${runnerRepoUrl}`]);
+  await exec.exec('npm', ['ci', '--loglevel=error'],  { cwd: config.runnerRepoPath });
 
-  // Clone the repository which need the runners
-  // That's becaus we need  the config.yaml inside it.
-  const githubToken = core.getInput('github-access-token');
-  let urlPrefix = "https://";
-  if (githubToken !== '') {
-     urlPrefix += githubToken + "@";
-  } 
-  urlPrefix += "github.com/";
-  const userRepoUrl = urlPrefix  + github.context.payload.repository.owner.login 
-    + "/" + github.context.payload.repository.name;
+  // Clone the repository which need the runners and obtain the path to the config.yaml file.
+  // If the repository is private we need an access token to be able to clone it.
+  const userRepoUrl = await buildUserRepoUrl(config);
   await exec.exec('git', ['clone', `${userRepoUrl}`]);
+
   // Export the env variable we need in our environment
   core.info("Setting up env variables...");
   switch (config.cloudProvider.toLowerCase()) {
     case providers.Aws:
       {
-        const awsAccessKey = core.getInput('aws-access-key-id');
-        const awsSecretAccessKey = core.getInput('aws-secret-access-key');
-        const awsRegion = core.getInput('aws-region');
-        process.env.AWS_ACCESS_KEY_ID=awsAccessKey;
-        process.env.AWS_SECRET_ACCESS_KEY=awsSecretAccessKey;
-        process.env.AWS_REGION=awsRegion;
+        process.env.AWS_ACCESS_KEY_ID = config.awsAccessKey;
+        process.env.AWS_SECRET_ACCESS_KEY = config.awsSecretAccessKey;
+        process.env.AWS_REGION = config.awsRegion;
       }
       break;
     case providers.Gcp:
       {
-        const googleCredentials = core.getInput('google-credentials');
-        const googleProject = core.getInput('google-project');
-        const googleRegion = core.getInput('google-region');
-        const googleZone = core.getInput('google-zone');
-        process.env.GOOGLE_CREDENTIALS=googleCredentials;
-        process.env.GOOGLE_PROJECT=googleProject;
-        process.env.GOOGLE_REGION=googleRegion;
-        process.env.GOOGLE_ZONE=googleZone;
+        process.env.GOOGLE_CREDENTIALS = config.googleCredentials;
+        process.env.GOOGLE_PROJECT = config.googleProject;
+        process.env.GOOGLE_REGION = config.googleRegion;
+        process.env.GOOGLE_ZONE = config.googleZone;
       }
       break;
-    default:
-      break;
   }
-  process.env.APP_ID = config.appID;
   process.env.PULUMI_BACKEND_URL = config.pulumiBackendUrl;
-  process.env.APP_PRIVATE_KEY = config.appPrivateKey;
+  process.env.APP_ID = config.githubAppID;
+  process.env.APP_PRIVATE_KEY = config.githubAppPrivateKey;
   process.env.PULUMI_CONFIG_PASSPHRASE = config.pulumiConfigPassphrase;
   // Skip the update check 
   process.env.PULUMI_SKIP_UPDATE_CHECK = "true";
@@ -10692,16 +10712,16 @@ async function run() {
   // Set CI to false to disable non-interactive mode. 
   process.env.CI = "false";
 
+  // Print all the environment variables for testing.
   await exec.exec('printenv');
 
   // Execution flow for testing
   core.info("Deploying the runners...");
-  await exec.exec('pulumi', ['login', `${config.pulumiBackendUrl}`], { cwd: config.repoPath });
-  config["providerPath"] = config.repoPath + "/"+ config.cloudProvider;
+  await exec.exec('pulumi', ['login', `${config.pulumiBackendUrl}`], { cwd: config.runnerRepoPath });
   await exec.exec('pulumi', ['stack', 'init', `${config.stackName}`, '--secrets-provider=passphrase'], { cwd: config.providerPath });
   await exec.exec('pulumi', ['stack', 'select', `${config.configstackName}`], { cwd: config.providerPath });
   await exec.exec('pulumi', ['stack', 'ls'], { cwd: config.providerPath });
-  await exec.exec('pulumi', ['update', '--diff', '--config-file', `${config.configPath}`], { cwd: config.providerPath });
+  await exec.exec('pulumi', ['update', '--diff', '--config-file', `${config.configFilePath}`], { cwd: config.providerPath });
   core.info("Runners deployed!");
 
   core.info("Waiting some time");
@@ -10709,7 +10729,7 @@ async function run() {
 
   core.info("Destroying the runners");
   await exec.exec('pulumi', ['stack', 'select', `${config.stackName}`], { cwd: config.providerPath });
-  await exec.exec('pulumi', ['destroy', '--config-file', `${config.configPath}`], { cwd: config.providerPath });
+  await exec.exec('pulumi', ['destroy', '--config-file', `${config.configFilePath}`], { cwd: config.providerPath });
   await exec.exec('pulumi', ['stack', 'rm', `${config.stackName}`], { cwd: config.providerPath });
   core.info("Job finished");
 
@@ -10725,7 +10745,20 @@ async function run() {
   // }
 }
 
+async function buildUserRepoUrl(config) {
+  // If the repository is private we need an access token to be able to clone it.
+  let urlPrefix = "https://";
+  if (config.githubToken !== '') {
+    urlPrefix += config.githubToken + "@";
+  } 
+  urlPrefix += "github.com/";
+  return urlPrefix
+    + github.context.payload.repository.owner.login + "/"
+    + github.context.payload.repository.name;
+}
+
 run();
+
 
 })();
 

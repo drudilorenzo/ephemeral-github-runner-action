@@ -31,7 +31,7 @@ async function run() {
   core.info("Cloning the repo and installing the dependencies...");
   const runnerRepoUrl = "https://github.com/pavlovic-ivan/ephemeral-github-runner.git";
   await exec.exec('git', ['clone', `${runnerRepoUrl}`]);
-  await exec.exec('npm', ['ci'],  { cwd: config.runnerRepoPath });
+  await exec.exec('npm', ['ci', '--loglevel=error'],  { cwd: config.runnerRepoPath });
 
   // Clone the repository which need the runners and obtain the path to the config.yaml file.
   // If the repository is private we need an access token to be able to clone it.
