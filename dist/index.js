@@ -10605,7 +10605,7 @@ async function run() {
   + "/"
   + github.context.payload.repository.name;
   config["configPath"] =
-  + homeDirectory 
+  homeDirectory 
   + "/"
   + github.context.payload.repository.name 
   + "/" 
