@@ -23,7 +23,8 @@ async function setConfig() {
       "githubAppPrivateKey": core.getInput('github-app-private-key'),
       "githubAccessToken": core.getInput('github-access-token'),
       "pulumiConfigPassphrase": core.getInput('pulumi-config-passphrase'),
-      "providerPath": config.runnerRepoPath + "/"+ config.cloudProvider
+      "providerPath": homeDirectory + "/ephemeral-github-runner" + "/" 
+        + core.getInput('pulumi-cloud-provider')
     };
 
     switch (config.cloudProvider.toLowerCase()) {
