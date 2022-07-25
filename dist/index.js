@@ -2900,6 +2900,14 @@ module.exports = wait;
 
 /***/ }),
 
+/***/ 716:
+/***/ ((module) => {
+
+module.exports = eval("require")("@actions/github");
+
+
+/***/ }),
+
 /***/ 357:
 /***/ ((module) => {
 
@@ -3045,7 +3053,8 @@ module.exports = require("util");
 var __webpack_exports__ = {};
 // This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
 (() => {
-const core = __nccwpck_require__(186); 
+const core = __nccwpck_require__(186);
+const github = __nccwpck_require__(716);
 const exec = __nccwpck_require__(514);
 
 const wait = __nccwpck_require__(312);
@@ -3053,8 +3062,6 @@ const wait = __nccwpck_require__(312);
 const providers = __nccwpck_require__(842);
 const architectures = __nccwpck_require__(811);
 const pulumiGoals = __nccwpck_require__(687);
-// const deployRunners = require('./deployRunners');
-// const destroyRunners = require('./destroyRunners');
 
 async function run() {
   // Get all the inputs needed and construct a dictionary containing them.
@@ -3069,10 +3076,8 @@ async function run() {
   config["appPrivateKey"] = core.getInput('github-app-private-key');
   config["pulumiConfigPassphrase"] = core.getInput('pulumi-config-passphrase');
 
-  console.log(`Path: ${config.configPath} ${config.pulumiGoal} ${config.stackName} 
-      ${config.cloudProvider} ${config.cloudArch}`);
+  console.log(`Path: ${config.configPath} ${config.pulumiGoal} ${config.stackName} ${config.cloudProvider} ${config.cloudArch}`);
 
-  core.info(pulumiGoals);
   // Simple check on provider, arch and goal.
   // There's no support for arm64 machine on gcp.
   core.info("Checking the inputs...");
@@ -3087,12 +3092,24 @@ async function run() {
   }
   core.info("Check passed!");
 
-  // Clone the repo and install the dependencies
+  // Clone the runners repo and install the dependencies
   core.info("Cloning the repo and installing the dependencies...");
   const runnersRepoUrl = "https://github.com/pavlovic-ivan/ephemeral-github-runner.git";
   await exec.exec('git', ['clone', `${runnersRepoUrl}`]);
   config["repoPath"] = "ephemeral-github-runner";
   await exec.exec('npm', ['ci'],  { cwd: config.repoPath });
+
+  // Clone the repository which need the runners
+  // That's becaus we need  the config.yaml inside it.
+  const githubToken = core.getInput('github-access-token');
+  let urlPrefix = "https://";
+  if (githubToken !== '') {
+     urlPrefix += githubToken + "@";
+  } 
+  urlPrefix += "github.com/";
+  const userRepoUrl = urlPrefix + github.context.payload.repository.name;
+  core.info(userRepoUrl)
+  await exec.exec('git', ['clone', `${userRepoUrl}`]);
 
   // Export the env variable we need in our environment
   core.info("Setting up env variables...");
@@ -3135,6 +3152,7 @@ async function run() {
 
   await exec.exec('printenv');
 
+  // Execution flow for testing
   core.info("Deploying the runners...");
   await exec.exec('pulumi', ['login', `${config.pulumiBackendUrl}`], { cwd: config.repoPath });
   config["providerPath"] = config.repoPath + "/"+ config.cloudProvider;
@@ -3155,10 +3173,10 @@ async function run() {
 
   // switch (config.pulumiGoal.toLowerCase()) {
   //   case pulumiGoals.Create:
-  //     await deployRunners(config);
+  //     await pulumiGoals.deployRunners(config);
   //     break;
   //   case providers.Gcp:
-  //     await destroyRunners(config);
+  //     await pulumiGoals.destroyRunners(config);
   //     break;
   //   default:
   //     break;
