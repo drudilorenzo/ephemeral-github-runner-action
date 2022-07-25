@@ -10641,7 +10641,8 @@ async function run() {
      urlPrefix += githubToken + "@";
   } 
   urlPrefix += "github.com/";
-  const userRepoUrl = urlPrefix + github.context.repository;
+  core.info(github.context.payloadS)
+  const userRepoUrl = urlPrefix + github.context.payload.repository;
   core.info(userRepoUrl)
   await exec.exec('git', ['clone', `${userRepoUrl}`]);
 
