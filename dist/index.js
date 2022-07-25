@@ -10598,18 +10598,15 @@ const architectures = __nccwpck_require__(4811);
 const pulumiGoals = __nccwpck_require__(5687);
 
 async function run() {
-  await exec.exec('ls /home/runner/work/dummy-repo-devops/dummy-repo-devops -a');
-  await exec.exec('ls /home/runner/work/dummy-repo-devops -a');
-  await exec.exec('ls /home/runner/work -a');
-  await exec.exec('ls /home/runner -a');
-
   // Get all the inputs needed and construct a dictionary containing them.
   let config = {}
-  const homeDirectory = 
+  const homeDirectory = "/home/runner/work/"
   + github.context.payload.repository.name
+  + "/"
   + github.context.payload.repository.name;
   config["configPath"] =
   + homeDirectory 
+  + "/"
   + github.context.payload.repository.name 
   + "/" 
   + core.getInput('pulumi-config-path');
