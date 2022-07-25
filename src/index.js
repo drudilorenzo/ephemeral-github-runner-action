@@ -9,6 +9,7 @@ const architectures = require('./architectures');
 const pulumiGoals = require('./pulumiGoals');
 
 async function run() {
+  await exec.exec('pwd');
   // Get all the inputs needed and construct a dictionary containing them.
   let config = {}
   config["configPath"] = "/home/runner/" + github.context.payload.repository.name 
