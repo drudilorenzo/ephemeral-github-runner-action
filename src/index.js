@@ -26,7 +26,6 @@ async function run() {
     throw new Error("Wrong goal");
   }
   core.info("Check passed!");
-  core.info(pulumiGoals.pulumiGoals.Create)
 
   // Clone the runners repo and install the dependencies
   core.info("Cloning the repo and installing the dependencies...");
