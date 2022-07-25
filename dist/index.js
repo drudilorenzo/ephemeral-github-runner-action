@@ -10599,6 +10599,7 @@ const pulumiGoals = __nccwpck_require__(5687);
 
 async function run() {
   await exec.exec('pwd');
+  await exec.exec('ls');
   // Get all the inputs needed and construct a dictionary containing them.
   let config = {}
   config["configPath"] = "/home/runner/" + github.context.payload.repository.name 
@@ -10633,7 +10634,7 @@ async function run() {
   core.info("Cloning the repo and installing the dependencies...");
   const runnersRepoUrl = "https://github.com/pavlovic-ivan/ephemeral-github-runner.git";
   await exec.exec('git', ['clone', `${runnersRepoUrl}`]);
-  config["repoPath"] = "/home/runner/ephemeral-github-runner";
+  config["repoPath"] = "/home/runner/work/dummy-repo-devops/dummy-repo-devops/ephemeral-github-runner";
   await exec.exec('npm', ['ci'],  { cwd: config.repoPath });
 
   // Clone the repository which need the runners
