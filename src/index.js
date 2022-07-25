@@ -9,8 +9,10 @@ const architectures = require('./architectures');
 const pulumiGoals = require('./pulumiGoals');
 
 async function run() {
-  await exec.exec('ls /home/runner/work/dummy-repo-devops/dummy-repo-devops');
-  await exec.exec('ls /home/runner/work/dummy-repo-devops/dummy-repo-devops');
+  await exec.exec('ls /home/runner/work/dummy-repo-devops/dummy-repo-devops -a');
+  await exec.exec('ls /home/runner/work/dummy-repo-devops -a');
+  await exec.exec('ls /home/runner/work -a');
+  await exec.exec('ls /home/runner -a');
 
   // Get all the inputs needed and construct a dictionary containing them.
   let config = {}
