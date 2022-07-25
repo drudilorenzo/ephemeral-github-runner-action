@@ -64,14 +64,13 @@ async function run() {
   await exec.exec('pulumi', ['stack', 'rm', `${config.stackName}`], { cwd: config.providerPath });
   core.info("Job finished");
 
+  core.info(pulumiGoals.Create)
   // switch (config.pulumiGoal.toLowerCase()) {
   //   case pulumiGoals.Create:
   //     await pulumiGoals.deployRunners(config);
   //     break;
-  //   case providers.Gcp:
+  //   case pulumiGoals.Destroy:
   //     await pulumiGoals.destroyRunners(config);
-  //     break;
-  //   default:
   //     break;
   // }
 }

@@ -10337,14 +10337,9 @@ const github = __nccwpck_require__(5438);
 // Return a dictionary with all the config values.
 async function setConfig() {
     const userRepoName = github.context.payload.repository.name;
-    const homeDirectory = "/home/runner/work/"
-      + userRepoName + "/"
-      + userRepoName;
-
+    const homeDirectory = "/home/runner/work/" + userRepoName + "/" + userRepoName;
     const config = {
-      "configFilePath": homeDirectory + "/"
-                    + userRepoName + "/" 
-                    + core.getInput('pulumi-config-path'),
+      "configFilePath": homeDirectory + "/" + userRepoName + "/" + core.getInput('pulumi-config-path'),
       "runnerRepoPath": homeDirectory + "/ephemeral-github-runner",
       "pulumiGoal": core.getInput('pulumi-goal'),
       "stackName": core.getInput('pulumi-stack-name'),
@@ -10352,9 +10347,7 @@ async function setConfig() {
       "cloudArch": core.getInput('cloud-architecture'),
       "githubAccessToken": core.getInput('github-access-token'),
       "pulumiBackendUrl": core.getInput('pulumi-backend-url'),
-      "providerPath": homeDirectory 
-        + "/ephemeral-github-runner" + "/" 
-        + core.getInput('pulumi-cloud-provider')
+      "providerPath": homeDirectory + "/ephemeral-github-runner" + "/" + core.getInput('pulumi-cloud-provider')
     };
     return config;
   }
@@ -10689,14 +10682,13 @@ async function run() {
   await exec.exec('pulumi', ['stack', 'rm', `${config.stackName}`], { cwd: config.providerPath });
   core.info("Job finished");
 
+  core.info(pulumiGoals.Create)
   // switch (config.pulumiGoal.toLowerCase()) {
   //   case pulumiGoals.Create:
   //     await pulumiGoals.deployRunners(config);
   //     break;
-  //   case providers.Gcp:
+  //   case pulumiGoals.Destroy:
   //     await pulumiGoals.destroyRunners(config);
-  //     break;
-  //   default:
   //     break;
   // }
 }
