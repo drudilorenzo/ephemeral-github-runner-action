@@ -26,6 +26,7 @@ async function run() {
     throw new Error("Wrong goal");
   }
   core.info("Check passed!");
+  core.info(pulumiGoals.Create)
 
   // Clone the runners repo and install the dependencies
   core.info("Cloning the repo and installing the dependencies...");
@@ -64,7 +65,6 @@ async function run() {
   await exec.exec('pulumi', ['stack', 'rm', `${config.stackName}`], { cwd: config.providerPath });
   core.info("Job finished");
 
-  core.info(pulumiGoals.Create)
   // switch (config.pulumiGoal.toLowerCase()) {
   //   case pulumiGoals.Create:
   //     await pulumiGoals.deployRunners(config);
