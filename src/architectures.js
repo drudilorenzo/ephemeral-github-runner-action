@@ -3,4 +3,4 @@ const architectures = {
     Amd64: "amd64"
 }
 
-module.exports = architectures;
+module.exports = { architectures };

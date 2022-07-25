@@ -17,55 +17,12 @@ inputs:
     description: 'The name of the Pulumi cloud provider. Supported providers: aws, gcp' 
     required: true
     default: ''
-  pulumi-config-passphrase:
-    description: 'The passphrase that Pulumi will use to encrypt secrets'
-    required: true
   cloud-architecture: 
     description: 'Supported architecture names: amd64 or arm64 (no support for gcp + arm64)' 
     required: true
     default: ''
-  pulumi-backend-url:
-    description: 'The url of the pulumi backend'
-    required: true
-    default: ''
-  github-app-id:
-    description: 'The ID of the app linked to you repo (see main repo docs for a better explanation)'
-    required: true
-    default: ''
-  github-app-private-key:
-    description: 'The private key of the app linked to you repo (see main repo docs for a better explanation)'
-    required: true
-    default: ''
   github-access-token:
     description: 'Github access token used to clone private repositories'
-    required: false
-    default: ''
-  aws-access-key-id:
-    description: 'An access key id linked to you AWS account'
-    required: false
-    default: ''
-  aws-secret-access-key:
-    description: 'The secret access key of aws key id you have insert'
-    required: false
-    default: ''
-  aws-region:
-    description: 'The AWS region you want to use, eg. eu-west-2'
-    required: false
-    default: 'eu-west-2'
-  google-credentials:
-    description: 'Google cloud services credentials'
-    required: false
-    default: ''
-  google-project:
-    description: 'GCP project ID'
-    required: false
-    default: ''
-  google-region:
-    description: 'Google region to use e.g. europe-west4'
-    required: false
-    default: ''
-  google-zone:
-    description: 'Google zone to use e.g. europe-west4-a'
     required: false
     default: ''
 runs:

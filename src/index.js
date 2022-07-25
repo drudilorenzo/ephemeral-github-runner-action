@@ -38,35 +38,10 @@ async function run() {
   const userRepoUrl = await buildUserRepoUrl(config);
   await exec.exec('git', ['clone', `${userRepoUrl}`]);
 
-  // Export the env variable we need in our environment
-  core.info("Setting up env variables...");
-  switch (config.cloudProvider.toLowerCase()) {
-    case providers.Aws:
-      {
-        process.env.AWS_ACCESS_KEY_ID = config.awsAccessKey;
-        process.env.AWS_SECRET_ACCESS_KEY = config.awsSecretAccessKey;
-        process.env.AWS_REGION = config.awsRegion;
-      }
-      break;
-    case providers.Gcp:
-      {
-        process.env.GOOGLE_CREDENTIALS = config.googleCredentials;
-        process.env.GOOGLE_PROJECT = config.googleProject;
-        process.env.GOOGLE_REGION = config.googleRegion;
-        process.env.GOOGLE_ZONE = config.googleZone;
-      }
-      break;
-  }
-  process.env.PULUMI_BACKEND_URL = config.pulumiBackendUrl;
-  process.env.APP_ID = config.githubAppID;
-  process.env.APP_PRIVATE_KEY = config.githubAppPrivateKey;
-  process.env.PULUMI_CONFIG_PASSPHRASE = config.pulumiConfigPassphrase;
-  // Skip the update check 
-  process.env.PULUMI_SKIP_UPDATE_CHECK = "true";
-  // Skip the pulumi confirmations
-  process.env.PULUMI_SKIP_CONFIRMATIONS = "true";
-  // Set CI to false to disable non-interactive mode. 
-  process.env.CI = "false";
+  // process.env.GOOGLE_CREDENTIALS = config.googleCredentials;
+  // process.env.GOOGLE_PROJECT = config.googleProject;
+  // process.env.GOOGLE_REGION = config.googleRegion;
+  // process.env.GOOGLE_ZONE = config.googleZone;
 
   // Print all the environment variables for testing.
   await exec.exec('printenv');

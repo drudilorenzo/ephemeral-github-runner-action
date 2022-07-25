@@ -10324,7 +10324,7 @@ const architectures = {
     Amd64: "amd64"
 }
 
-module.exports = architectures;
+module.exports = { architectures };
 
 /***/ }),
 
@@ -10333,7 +10333,6 @@ module.exports = architectures;
 
 const core = __nccwpck_require__(2186);
 const github = __nccwpck_require__(5438);
-const providers = __nccwpck_require__(8842);
 
 // Return a dictionary with all the config values.
 async function setConfig() {
@@ -10350,33 +10349,12 @@ async function setConfig() {
       "pulumiGoal": core.getInput('pulumi-goal'),
       "stackName": core.getInput('pulumi-stack-name'),
       "cloudProvider": core.getInput('pulumi-cloud-provider'),
-      "pulumiBackendUrl": core.getInput('pulumi-backend-url'),
       "cloudArch": core.getInput('cloud-architecture'),
-      "githubAppID": core.getInput('github-app-id'),
-      "githubAppPrivateKey": core.getInput('github-app-private-key'),
       "githubAccessToken": core.getInput('github-access-token'),
-      "pulumiConfigPassphrase": core.getInput('pulumi-config-passphrase'),
-      "providerPath": homeDirectory + "/ephemeral-github-runner" + "/" 
+      "providerPath": homeDirectory 
+        + "/ephemeral-github-runner" + "/" 
         + core.getInput('pulumi-cloud-provider')
     };
-
-    switch (config.cloudProvider.toLowerCase()) {
-      case providers.Aws:
-        {
-          config["awsAccessKey"] = core.getInput('aws-access-key-id');
-          config["awsSecretAccessKey"] = core.getInput('aws-secret-access-key');
-          config["awsRegion"] = core.getInput('aws-region');
-        }
-        break;
-      case providers.Gcp:
-        {
-          config["googleCredentials"] = core.getInput('google-credentials');
-          config["googleProject"] = core.getInput('google-project');
-          config["googleRegion"] = core.getInput('google-region');
-          config["googleZone"] = core.getInput('google-zone');
-        }
-        break;
-    }
     return config;
   }
 
@@ -10392,7 +10370,7 @@ const providers = {
     Gcp: "gcp"
 }
 
-module.exports = providers;
+module.exports = { providers };
 
 /***/ }),
 
@@ -10429,7 +10407,8 @@ async function destroyRunners(config) {
 module.exports = {
     pulumiGoals, 
     deployRunners,
-    destroyRunners};
+    destroyRunners
+};
 
 /***/ }),
 
@@ -10683,35 +10662,10 @@ async function run() {
   const userRepoUrl = await buildUserRepoUrl(config);
   await exec.exec('git', ['clone', `${userRepoUrl}`]);
 
-  // Export the env variable we need in our environment
-  core.info("Setting up env variables...");
-  switch (config.cloudProvider.toLowerCase()) {
-    case providers.Aws:
-      {
-        process.env.AWS_ACCESS_KEY_ID = config.awsAccessKey;
-        process.env.AWS_SECRET_ACCESS_KEY = config.awsSecretAccessKey;
-        process.env.AWS_REGION = config.awsRegion;
-      }
-      break;
-    case providers.Gcp:
-      {
-        process.env.GOOGLE_CREDENTIALS = config.googleCredentials;
-        process.env.GOOGLE_PROJECT = config.googleProject;
-        process.env.GOOGLE_REGION = config.googleRegion;
-        process.env.GOOGLE_ZONE = config.googleZone;
-      }
-      break;
-  }
-  process.env.PULUMI_BACKEND_URL = config.pulumiBackendUrl;
-  process.env.APP_ID = config.githubAppID;
-  process.env.APP_PRIVATE_KEY = config.githubAppPrivateKey;
-  process.env.PULUMI_CONFIG_PASSPHRASE = config.pulumiConfigPassphrase;
-  // Skip the update check 
-  process.env.PULUMI_SKIP_UPDATE_CHECK = "true";
-  // Skip the pulumi confirmations
-  process.env.PULUMI_SKIP_CONFIRMATIONS = "true";
-  // Set CI to false to disable non-interactive mode. 
-  process.env.CI = "false";
+  // process.env.GOOGLE_CREDENTIALS = config.googleCredentials;
+  // process.env.GOOGLE_PROJECT = config.googleProject;
+  // process.env.GOOGLE_REGION = config.googleRegion;
+  // process.env.GOOGLE_ZONE = config.googleZone;
 
   // Print all the environment variables for testing.
   await exec.exec('printenv');

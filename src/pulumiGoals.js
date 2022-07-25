@@ -28,4 +28,5 @@ async function destroyRunners(config) {
 module.exports = {
     pulumiGoals, 
     deployRunners,
-    destroyRunners};
+    destroyRunners
+};
