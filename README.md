@@ -1,4 +1,4 @@
-#  Javascript github action to deploy and destroy self-hosted runners. 
+# Javascript github action to deploy and destroy self-hosted runners
 
 <p align="center">
   <a href="https://github.com/actions/javascript-action/actions"><img alt="javscript-action status" src="https://github.com/actions/javascript-action/workflows/units-test/badge.svg"></a>
@@ -73,9 +73,10 @@ You can now consume the action by referencing the v1 branch.
       google-region: 'Google region'
       google-zone: 'Google zone'
 ```
+
 ## Important
 
-The workflow will fail if the cloud architecture == arm64 and the pulumi cloud provider == GCP. 
+The workflow will fail if the cloud architecture == arm64 and the pulumi cloud provider == GCP.
 
 ## References
 
