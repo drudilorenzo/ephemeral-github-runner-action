@@ -12,7 +12,7 @@ async function run() {
   // Get all the inputs needed and construct a dictionary containing them.
   let config = {}
   config["configPath"] = "/home/runner/" + github.context.payload.repository.name 
-    + core.getInput('pulumi-config-path');
+    + "/" + core.getInput('pulumi-config-path');
   core.info(config.configPath)
   config["pulumiGoal"] = core.getInput('pulumi-goal');
   config["stackName"] = core.getInput('pulumi-stack-name');
@@ -43,7 +43,7 @@ async function run() {
   core.info("Cloning the repo and installing the dependencies...");
   const runnersRepoUrl = "https://github.com/pavlovic-ivan/ephemeral-github-runner.git";
   await exec.exec('git', ['clone', `${runnersRepoUrl}`]);
-  config["repoPath"] = "ephemeral-github-runner";
+  config["repoPath"] = "/home/runner/ephemeral-github-runner";
   await exec.exec('npm', ['ci'],  { cwd: config.repoPath });
 
   // Clone the repository which need the runners
@@ -57,7 +57,6 @@ async function run() {
   const userRepoUrl = urlPrefix  + github.context.payload.repository.owner.login 
     + "/" + github.context.payload.repository.name;
   await exec.exec('git', ['clone', `${userRepoUrl}`]);
-  await exec.exec('pwd')
   // Export the env variable we need in our environment
   core.info("Setting up env variables...");
   switch (config.cloudProvider.toLowerCase()) {
