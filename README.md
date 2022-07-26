@@ -10,7 +10,6 @@ Before starting make sure:
 ## How to use with AWS
 
 Create a file called config.yaml in the project root with following content:
-
 ```
 config:
   ephemeral-github-runner:bootDiskSizeInGB: "100"
@@ -23,9 +22,12 @@ config:
   ephemeral-github-runner:runnersCount: "1"
   
  ```
+ 
+ It isn't mandatory to put the  config file in the root directory. Example: 'dir1/dir2/config.yaml.'
+
 ## How to use with GCP
 
-Create a file called config.yaml in the project root with following content:
+Create a file called config.yaml with following content:
 
 ```
 config:
@@ -39,6 +41,9 @@ config:
   ephemeral-github-runner:runnersCount: "1"
   
 ```
+
+It isn't mandatory to put the  config file in the root directory. Example: 'dir1/dir2/config.yaml.' 
+ 
 ## Usage
 
 ```yaml
