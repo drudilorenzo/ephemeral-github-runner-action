@@ -4,12 +4,12 @@
 
 Before starting make sure: 
 - you have an account set up in either AWS or GCP.
-- you have a github app linked to the repository where the runners have to work (Same repo of the one inside config.yaml file).
-- you have a github access token (required only if the repository is private).
+- you have a [github app](https://github.com/pavlovic-ivan/ephemeral-github-runner/blob/main/QUICKSTART.md#github-app-setup) linked to the repository where the runners have to work (Same repo of the one inside config.yaml file).
+- you have a [github access token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token) (required only if the repository is private).
 - you have a ready backend for the cloud provider you want to use ('s3://bucket_name' or 'gs://bucket_name').
 - you have a machine image for the cloud provider you want to use.
 
-## How to use with AWS
+## AWS Configuration
 
 Create a file called config.yaml with following content:
 ```
@@ -27,7 +27,7 @@ config:
  
  It isn't mandatory to put the  config file in the root directory. Example: 'dir1/dir2/config.yaml.'
 
-## How to use with GCP
+## GCP Configuration
 
 Create a file called config.yaml with following content:
 
@@ -47,7 +47,7 @@ config:
 It isn't mandatory to put the  config file in the root directory. Example: 'dir1/dir2/config.yaml.' 
 
 
-## Inputs
+## Action's Inputs
 
 Everything below except Github access token is required. There are no default values provided.
 
@@ -57,9 +57,30 @@ Everything below except Github access token is required. There are no default va
 - pulumi-cloud-provider: 'The name of the Pulumi cloud provider. Supported providers: aws, gcp' 
 - cloud-architecture: 'Supported architecture names: amd64 or arm64 (no support for gcp + arm64)'
 - github-access-token: 'Github access token used to clone private repositories'
-- pulumi-backend-url: 'The url of your Pulumi project backend'
 
-## Usage with AWS
+## Action's Environment Variables
+
+- APP_ID: <GitHub App ID>
+- APP_PRIVATE_KEY: <GitHub App Private Key>
+- PULUMI_CONFIG_PASSPHRASE: <A passphrase that will be used to encrypt secrets>
+- PULUMI_SKIP_UPDATE_CHECK: <Skip the pulumi's update check>
+- PULUMI_SKIP_CONFIRMATIONS: <Skip the pulumi's confirmations>
+- CI: <Disable the pulumi's CI service recognition>
+
+AWS:
+- PULUMI_BACKEND_URL: <path to the S3 bucket in format 's3://bucket_name'>
+- AWS_ACCESS_KEY_ID: <path to the S3 bucket in format 's3://bucket_name'>
+- AWS_SECRET_ACCESS_KEY: <your secret access key received when account was created>
+- AWS_REGION: <AWS region, eg. eu-west-2>
+
+GCP:
+- PULUMI_BACKEND_URL: <path to the GCP bucket in format 'gs://bucket_name'>
+- GOOGLE_CREDENTIALS:  <GCP credentials>
+- GOOGLE_PROJECT: <GCP project ID>
+- GOOGLE_REGION: <GCP region e.g. 'europe-west4'>
+- GOOGLE_ZONE: <GCP zone e.g. 'europe-west4-a'>
+
+## Usage example with AWS
 
 ```yaml 
 
@@ -94,7 +115,7 @@ jobs:
 All the personal inputs are passed by github secret.
 [See the docs](https://docs.github.com/en/actions/security-guides/encrypted-secrets).
 
-## Usage with GCP
+## Usage example with GCP
 
 ```yaml 
 
@@ -129,6 +150,12 @@ jobs:
 
 All the personal inputs are passed by github secret.
 [See the docs](https://docs.github.com/en/actions/security-guides/encrypted-secrets).
+
+## Main projects
+
+Main project: [ephemeral-github-runner](https://github.com/pavlovic-ivan/ephemeral-github-runner)
+
+Images builder: [ephemeral-github-runner-image](https://github.com/pavlovic-ivan/ephemeral-github-runner-image)
 
 ## Important
 
