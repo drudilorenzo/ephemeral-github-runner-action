@@ -9,7 +9,7 @@ Before starting make sure:
 
 ## How to use with AWS
 
-Create a file called config.yaml in the project root with following content:
+Create a file called config.yaml with following content:
 ```
 config:
   ephemeral-github-runner:bootDiskSizeInGB: "100"
