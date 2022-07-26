@@ -51,34 +51,34 @@ It isn't mandatory to put the  config file in the root directory. Example: 'dir1
 
 Everything below except Github access token is required. There are no default values provided.
 
-- pulumi-config-path: 'A path to your Pulumi project config file' 
-- pulumi-goal: 'The name of the Pulumi goal. Supported values: create, destroy'
-- pulumi-stack-name: 'The name of the Pulumi stack.'
-- pulumi-cloud-provider: 'The name of the Pulumi cloud provider. Supported providers: aws, gcp' 
-- cloud-architecture: 'Supported architecture names: amd64 or arm64 (no support for gcp + arm64)'
-- github-access-token: 'Github access token used to clone private repositories'
+- pulumi-config-path: A path to your Pulumi project config file 
+- pulumi-goal: The name of the Pulumi goal. Supported values: create, destroy
+- pulumi-stack-name: The name of the Pulumi stack.
+- pulumi-cloud-provider: The name of the Pulumi cloud provider. Supported providers: aws, gcp 
+- cloud-architecture: Supported architecture names: amd64 or arm64 (no support for gcp + arm64)
+- github-access-token: Github access token used to clone private repositories
 
 ## Action's Environment Variables
 
-- APP_ID: <GitHub App ID>
-- APP_PRIVATE_KEY: <GitHub App Private Key>
-- PULUMI_CONFIG_PASSPHRASE: <A passphrase that will be used to encrypt secrets>
-- PULUMI_SKIP_UPDATE_CHECK: <Skip the pulumi's update check>
-- PULUMI_SKIP_CONFIRMATIONS: <Skip the pulumi's confirmations>
-- CI: <Disable the pulumi's CI service recognition>
+- APP_ID: GitHub App ID
+- APP_PRIVATE_KEY: GitHub App Private Key
+- PULUMI_CONFIG_PASSPHRASE: A passphrase that will be used to encrypt secrets
+- PULUMI_SKIP_UPDATE_CHECK: Skip pulumi's update check
+- PULUMI_SKIP_CONFIRMATIONS: Skip pulumi's confirmations
+- CI: Disable pulumi's CI service recognition
 
 AWS:
-- PULUMI_BACKEND_URL: <path to the S3 bucket in format 's3://bucket_name'>
-- AWS_ACCESS_KEY_ID: <path to the S3 bucket in format 's3://bucket_name'>
-- AWS_SECRET_ACCESS_KEY: <your secret access key received when account was created>
-- AWS_REGION: <AWS region, eg. eu-west-2>
+- PULUMI_BACKEND_URL: Path to the S3 bucket in format 's3://bucket_name'
+- AWS_ACCESS_KEY_ID: Path to the S3 bucket in format 's3://bucket_name'
+- AWS_SECRET_ACCESS_KEY: Your secret access key received when account was created
+- AWS_REGION: AWS region, eg. eu-west-2
 
 GCP:
-- PULUMI_BACKEND_URL: <path to the GCP bucket in format 'gs://bucket_name'>
-- GOOGLE_CREDENTIALS:  <GCP credentials>
-- GOOGLE_PROJECT: <GCP project ID>
-- GOOGLE_REGION: <GCP region e.g. 'europe-west4'>
-- GOOGLE_ZONE: <GCP zone e.g. 'europe-west4-a'>
+- PULUMI_BACKEND_URL: Path to the GCP bucket in format 'gs://bucket_name'
+- GOOGLE_CREDENTIALS:  GCP credentials
+- GOOGLE_PROJECT: GCP project ID
+- GOOGLE_REGION: GCP region e.g. 'europe-west4'
+- GOOGLE_ZONE: GCP zone e.g. 'europe-west4-a'
 
 ## Usage example with AWS
 
