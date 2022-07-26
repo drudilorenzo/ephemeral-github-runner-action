@@ -8,7 +8,8 @@
 
 ## Prerequisites
 
-Before starting make sure: 
+Before starting make sure:
+
 - You have an account set up in either AWS or GCP.
 - You have a [github app](https://github.com/pavlovic-ivan/ephemeral-github-runner/blob/main/QUICKSTART.md#github-app-setup) linked to the repository where the runners have to work (Same repo of the one inside config.yaml file).
 - You have a [github access token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token) (required only if the repository is private).
@@ -18,7 +19,8 @@ Before starting make sure:
 ## AWS Configuration
 
 Create a file called config.yaml with following content:
-```
+
+```yaml
 config:
   ephemeral-github-runner:bootDiskSizeInGB: "100"
   ephemeral-github-runner:bootDiskType: pd-balanced
@@ -30,14 +32,14 @@ config:
   ephemeral-github-runner:runnersCount: "1"
   
  ```
- 
+
  It isn't mandatory to put the  config file in the root directory. Example: 'dir1/dir2/config.yaml.'
 
 ## GCP Configuration
 
 Create a file called config.yaml with following content:
 
-```
+```yaml
 config:
   ephemeral-github-runner:bootDiskSizeInGB: "100"
   ephemeral-github-runner:bootDiskType: pd-balanced
@@ -50,17 +52,16 @@ config:
   
 ```
 
-It isn't mandatory to put the  config file in the root directory. Example: 'dir1/dir2/config.yaml.' 
-
+It isn't mandatory to put the  config file in the root directory. Example: 'dir1/dir2/config.yaml.'
 
 ## Action's Inputs
 
 Everything below except Github access token is required. There are no default values provided.
 
-- pulumi-config-path: A path to your Pulumi project config file 
+- pulumi-config-path: A path to your Pulumi project config file
 - pulumi-goal: The name of the Pulumi goal. Supported values: create, destroy
 - pulumi-stack-name: The name of the Pulumi stack.
-- pulumi-cloud-provider: The name of the Pulumi cloud provider. Supported providers: aws, gcp 
+- pulumi-cloud-provider: The name of the Pulumi cloud provider. Supported providers: aws, gcp
 - cloud-architecture: Supported architecture names: amd64 or arm64 (no support for gcp + arm64)
 - github-access-token: Github access token used to clone private repositories
 
@@ -74,12 +75,14 @@ Everything below except Github access token is required. There are no default va
 - CI: Disable pulumi's CI service recognition
 
 AWS:
+
 - PULUMI_BACKEND_URL: Path to the S3 bucket in format 's3://bucket_name'
 - AWS_ACCESS_KEY_ID: Path to the S3 bucket in format 's3://bucket_name'
 - AWS_SECRET_ACCESS_KEY: Your secret access key received when account was created
 - AWS_REGION: AWS region, eg. eu-west-2
 
 GCP:
+
 - PULUMI_BACKEND_URL: Path to the GCP bucket in format 'gs://bucket_name'
 - GOOGLE_CREDENTIALS:  GCP credentials
 - GOOGLE_PROJECT: GCP project ID
@@ -88,7 +91,7 @@ GCP:
 
 ## Usage example with AWS
 
-```yaml 
+```yaml
 
 name: ephemeral-runners
 on: <Event on which the action have to start>
@@ -123,7 +126,7 @@ All the personal inputs are passed by github secret.
 
 ## Usage example with GCP
 
-```yaml 
+```yaml
 
 name: ephemeral-runners
 on: <Event on which the action have to start>
