@@ -3,9 +3,11 @@
 ## Prerequisites
 
 Before starting make sure: 
-- you have access to an AWS or GCP project
 - you have an account set up in either AWS or GCP.
-
+- you have a github app linked to the repository where the runners have to work (Same repo of the one inside config.yaml file).
+- you have a github access token (required only if the repository is private).
+- you have a ready backend for the cloud provider you want to use ('s3://bucket_name' or 'gs://bucket_name').
+- you have a machine image for the cloud provider you want to use.
 
 ## How to use with AWS
 
@@ -57,17 +59,17 @@ Everything below except Github access token is required. There are no default va
 - github-access-token: 'Github access token used to clone private repositories'
 - pulumi-backend-url: 'The url of your Pulumi project backend'
 
-## Usage
+## Usage with AWS
 
 ```yaml 
 
 name: ephemeral-runners
-on: workflow_dispatch
+on: <Event on which the action have to start>
 jobs:
     manage-runners:
         runs-on: ubuntu-latest
         steps:
-          - uses: LorenzoDrudi/ephemeral-github-runner-action@refactoring
+          - uses: LorenzoDrudi/ephemeral-github-runner-action@<version to use>
             env:
               PULUMI_BACKEND_URL: ${{ secrets.PULUMI_BACKEND_URL }}
               APP_ID: ${{ secrets.APP_ID }}
@@ -80,14 +82,54 @@ jobs:
               AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
               AWS_REGION: ${{ secrets.AWS_REGION }}
             with:
-              pulumi-config-path: 'config.yaml'
-              pulumi-goal: 'create'
-              pulumi-stack-name: 'dev6'
+              pulumi-config-path: <Path to the config file. e.g. dir1/dir2/config.yaml>
+              pulumi-goal:  <Pulumi goal. Supported: create, destroy>
+              pulumi-stack-name: <Stack name>
               pulumi-cloud-provider: 'aws'
-              cloud-architecture: 'arm64'
+              cloud-architecture:  <Architecture to use. Supported: amd64, arm64>
               github-access-token: ${{ secrets.ACCESS_TOKEN }}
               pulumi-backend-url: ${{ secrets.PULUMI_BACKEND_URL }}
 ```
+
+All the personal inputs are passed by github secret.
+[See the docs](https://docs.github.com/en/actions/security-guides/encrypted-secrets).
+
+## Usage with GCP
+
+```yaml 
+
+name: ephemeral-runners
+on: <Event on which the action have to start>
+jobs:
+    manage-runners:
+        runs-on: ubuntu-latest
+        steps:
+          - uses: LorenzoDrudi/ephemeral-github-runner-action@<version to use>
+            env:
+              PULUMI_BACKEND_URL: ${{ secrets.PULUMI_BACKEND_URL }}
+              APP_ID: ${{ secrets.APP_ID }}
+              APP_PRIVATE_KEY: ${{ secrets.APP_PRIVATE_KEY }}
+              PULUMI_CONFIG_PASSPHRASE: ${{ secrets.PULUMI_CONFIG_PASSPHRASE }}
+              PULUMI_SKIP_UPDATE_CHECK: "true"
+              PULUMI_SKIP_CONFIRMATIONS: "true"
+              CI: "false"
+              GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
+              GOOGLE_PROJECT: ${{ secrets.GOOGLE_PROJECT }}
+              GOOGLE_REGION: ${{ secrets.GOOGLE_REGION }}
+              GOOGLE_ZONE: ${{ secrets.GOOGLE_ZONE }}
+            with:
+              pulumi-config-path: <Path to the config file. e.g. dir1/dir2/config.yaml>
+              pulumi-goal:  <Pulumi goal. Supported: create, destroy>
+              pulumi-stack-name: <Stack name>
+              pulumi-cloud-provider: 'gcp'
+              cloud-architecture:  'amd64' #It's the only arch supported with gcp cloud provider.
+              github-access-token: ${{ secrets.ACCESS_TOKEN }}
+              pulumi-backend-url: ${{ secrets.PULUMI_BACKEND_URL }}
+```
+
+All the personal inputs are passed by github secret.
+[See the docs](https://docs.github.com/en/actions/security-guides/encrypted-secrets).
+
 ## Important
 
 The workflow will fail if the cloud architecture == arm64 and the pulumi cloud provider == GCP.
