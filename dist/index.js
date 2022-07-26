@@ -10645,6 +10645,7 @@ async function run() {
   }
   core.info("Check passed!");
 
+  await exec.exec('pulumi', ['version']);  
   // Clone the runners repo and install the dependencies
   core.info("Cloning the repo and installing the dependencies...");
   const runnerRepoUrl = "https://github.com/pavlovic-ivan/ephemeral-github-runner.git";
