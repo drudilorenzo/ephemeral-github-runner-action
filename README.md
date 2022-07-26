@@ -1,4 +1,4 @@
-# JavaScript github action to deploy and destroy self-hosted runners
+# JavaScript Github Action to deploy and destroy self-hosted runners
 
 ## Prerequisites
 
@@ -43,7 +43,20 @@ config:
 ```
 
 It isn't mandatory to put the  config file in the root directory. Example: 'dir1/dir2/config.yaml.' 
- 
+
+
+## Inputs
+
+Everything below except Github access token is required. There are no default values provided.
+
+- pulumi-config-path: 'A path to your Pulumi project config file' 
+- pulumi-goal: 'The name of the Pulumi goal. Supported values: create, destroy'
+- pulumi-stack-name: 'The name of the Pulumi stack.'
+- pulumi-cloud-provider: 'The name of the Pulumi cloud provider. Supported providers: aws, gcp' 
+- cloud-architecture: 'Supported architecture names: amd64 or arm64 (no support for gcp + arm64)'
+- github-access-token: 'Github access token used to clone private repositories'
+- pulumi-backend-url: 'The url of your Pulumi project backend'
+
 ## Usage
 
 ```yaml 
@@ -75,7 +88,6 @@ jobs:
               github-access-token: ${{ secrets.ACCESS_TOKEN }}
               pulumi-backend-url: ${{ secrets.PULUMI_BACKEND_URL }}
 ```
-
 ## Important
 
 The workflow will fail if the cloud architecture == arm64 and the pulumi cloud provider == GCP.
