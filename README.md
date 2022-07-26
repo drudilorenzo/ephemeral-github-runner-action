@@ -46,7 +46,8 @@ It isn't mandatory to put the  config file in the root directory. Example: 'dir1
  
 ## Usage
 
-```yaml
+```yaml 
+
 name: ephemeral-runners
 on: workflow_dispatch
 jobs:
@@ -54,20 +55,25 @@ jobs:
         runs-on: ubuntu-latest
         steps:
           - uses: LorenzoDrudi/ephemeral-github-runner-action@refactoring
+            env:
+              PULUMI_BACKEND_URL: ${{ secrets.PULUMI_BACKEND_URL }}
+              APP_ID: ${{ secrets.APP_ID }}
+              APP_PRIVATE_KEY: ${{ secrets.APP_PRIVATE_KEY }}
+              PULUMI_CONFIG_PASSPHRASE: ${{ secrets.PULUMI_CONFIG_PASSPHRASE }}
+              PULUMI_SKIP_UPDATE_CHECK: "true"
+              PULUMI_SKIP_CONFIRMATIONS: "true"
+              CI: "false"
+              AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+              AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+              AWS_REGION: ${{ secrets.AWS_REGION }}
             with:
               pulumi-config-path: 'config.yaml'
               pulumi-goal: 'create'
-              pulumi-stack-name: 'dev5'
+              pulumi-stack-name: 'dev6'
               pulumi-cloud-provider: 'aws'
-              pulumi-config-passphrase: ${{ secrets.PULUMI_CONFIG_PASSPHRASE }}
               cloud-architecture: 'arm64'
-              pulumi-backend-url: ${{ secrets.PULUMI_BACKEND_URL }}
-              github-app-id: ${{ secrets.APP_ID }}
-              github-app-private-key: ${{ secrets.APP_PRIVATE_KEY }}
-              aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-              aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-              aws-region: ${{ secrets.AWS_REGION }}
               github-access-token: ${{ secrets.ACCESS_TOKEN }}
+              pulumi-backend-url: ${{ secrets.PULUMI_BACKEND_URL }}
 ```
 
 ## Important
