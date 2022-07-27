@@ -6,22 +6,22 @@ const pulumiGoals = {
     DESTROY: "destroy"
 };
 
-async function deployRunners(config) {
+async function deployRunners(CONFIG) {
     core.info("Deploying the runners...");
-    await exec.exec('pulumi', ['login', `${config.pulumiBackendUrl}`], { cwd: config.runnerRepoPath });
-    await exec.exec('pulumi', ['stack', 'init', `${config.stackName}`, '--secrets-provider=passphrase'], { cwd: config.providerPath });
-    await exec.exec('pulumi', ['stack', 'select', `${config.stackName}`], { cwd: config.providerPath });
-    await exec.exec('pulumi', ['stack', 'ls'], { cwd: config.providerPath });
-    await exec.exec('pulumi', ['update', '--diff', '--config-file', `${config.configFilePath}`], { cwd: config.providerPath });
+    await exec.exec('pulumi', ['login', `${CONFIG.pulumiBackendUrl}`], { cwd: CONFIG.runnerRepoPath });
+    await exec.exec('pulumi', ['stack', 'init', `${CONFIG.stackName}`, '--secrets-provider=passphrase'], { cwd: CONFIG.providerPath });
+    await exec.exec('pulumi', ['stack', 'select', `${CONFIG.stackName}`], { cwd: CONFIG.providerPath });
+    await exec.exec('pulumi', ['stack', 'ls'], { cwd: CONFIG.providerPath });
+    await exec.exec('pulumi', ['update', '--diff', '--config-file', `${CONFIG.configFilePath}`], { cwd: CONFIG.providerPath });
     core.info("Runners deployed!");
 }
   
-async function destroyRunners(config) {
+async function destroyRunners(CONFIG) {
     core.info("Destroying the runners");
-    await exec.exec('pulumi', ['login', `${config.pulumiBackendUrl}`], { cwd: config.runnerRepoPath });
-    await exec.exec('pulumi', ['stack', 'select', `${config.stackName}`], { cwd: config.providerPath });
-    await exec.exec('pulumi', ['destroy', '--config-file', `${config.configFilePath}`], { cwd: config.providerPath });
-    await exec.exec('pulumi', ['stack', 'rm', `${config.stackName}`], { cwd: config.providerPath });
+    await exec.exec('pulumi', ['login', `${CONFIG.pulumiBackendUrl}`], { cwd: CONFIG.runnerRepoPath });
+    await exec.exec('pulumi', ['stack', 'select', `${CONFIG.stackName}`], { cwd: CONFIG.providerPath });
+    await exec.exec('pulumi', ['destroy', '--config-file', `${CONFIG.configFilePath}`], { cwd: CONFIG.providerPath });
+    await exec.exec('pulumi', ['stack', 'rm', `${CONFIG.stackName}`], { cwd: CONFIG.providerPath });
     core.info("Job finished");
 }
 
