@@ -12,7 +12,7 @@ Before starting make sure:
 
 - You have an account set up in either AWS or GCP.
 - You have a [github app](https://github.com/pavlovic-ivan/ephemeral-github-runner/blob/main/QUICKSTART.md#github-app-setup) linked to the repository where the runners have to work (Same repo of the one inside config.yaml file).
-- You have a ready backend on the cloud provider you want to use ('s3://bucket_name' or 'gs://bucket_name').
+- You have a ready backend on the cloud provider you want to use (<s3://bucket_name> or <gs://bucket_name>).
 - You have a machine image on the cloud provider you want to use.
 
 ## AWS Configuration
@@ -68,18 +68,17 @@ Everything below is required. There are no default values provided.
 - APP_ID: GitHub App ID
 - APP_PRIVATE_KEY: GitHub App Private Key
 - PULUMI_CONFIG_PASSPHRASE: A passphrase that will be used to encrypt secrets
-- CI: Disable pulumi's CI service recognition
 
 AWS:
 
-- PULUMI_BACKEND_URL: Path to the S3 bucket in format 's3://bucket_name'
+- PULUMI_BACKEND_URL: Path to the S3 bucket in format -> s3://bucket_name
 - AWS_ACCESS_KEY_ID: Your access key id received when account was created
 - AWS_SECRET_ACCESS_KEY: Your secret access key received when account was created
 - AWS_REGION: AWS region, eg. eu-west-2
 
 GCP:
 
-- PULUMI_BACKEND_URL: Path to the GCP bucket in format 'gs://bucket_name'
+- PULUMI_BACKEND_URL: Path to the GS bucket in format -> gs://bucket_name
 - GOOGLE_CREDENTIALS:  GCP credentials
 - GOOGLE_PROJECT: GCP project ID
 - GOOGLE_REGION: GCP region e.g. 'europe-west4'
@@ -101,7 +100,6 @@ jobs:
               APP_ID: ${{ secrets.APP_ID }}
               APP_PRIVATE_KEY: ${{ secrets.APP_PRIVATE_KEY }}
               PULUMI_CONFIG_PASSPHRASE: ${{ secrets.PULUMI_CONFIG_PASSPHRASE }}
-              CI: "false"
               AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
               AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
               AWS_REGION: ${{ secrets.AWS_REGION }}
@@ -133,7 +131,6 @@ jobs:
               APP_ID: ${{ secrets.APP_ID }}
               APP_PRIVATE_KEY: ${{ secrets.APP_PRIVATE_KEY }}
               PULUMI_CONFIG_PASSPHRASE: ${{ secrets.PULUMI_CONFIG_PASSPHRASE }}
-              CI: "false"
               GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
               GOOGLE_PROJECT: ${{ secrets.GOOGLE_PROJECT }}
               GOOGLE_REGION: ${{ secrets.GOOGLE_REGION }}
