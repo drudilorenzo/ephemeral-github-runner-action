@@ -2,8 +2,8 @@ const core = require('@actions/core');
 const github = require('@actions/github');
 const exec = require('@actions/exec');
 const wait = require('./wait');
-const providers = require('./providers');
-const architectures = require('./architectures');
+const { providers } = require('./providers');
+const { architectures } = require('./architectures');
 const pulumiGoals = require('./pulumiGoals');
 const configuration = require('./configuration');
 
@@ -11,19 +11,18 @@ async function run() {
 
 try {
     // Get all the inputs needed and construct a dictionary containing them.
-    const config = await configuration.getConfig();
-    await configuration.getConfig();
+    const config = configuration.getConfig();
 
     console.log(`Path: ${config.configFilePath} ${config.pulumiGoal} ${config.stackName} ${config.cloudProvider} ${config.cloudArch}`);
 
     // Simple check on provider, arch and goal.
     // There's no support for arm64 machine on gcp.
     core.info("Checking the inputs...");
-    if (!Object.values(providers.providers).includes(config.cloudProvider.toLowerCase())) {
+    if (!Object.values(providers).includes(config.cloudProvider.toLowerCase())) {
         throw new Error("Wrong provider");
-    } else if (!Object.values(architectures.architectures).includes(config.cloudArch.toLowerCase())) {
+    } else if (!Object.values(architectures).includes(config.cloudArch.toLowerCase())) {
         throw new Error("Wrong arch");
-    } else if (config.cloudProvider.toLowerCase() == providers.providers.Gcp && config.cloudArch.toLowerCase() == architectures.architectures.Arm64) {
+    } else if (config.cloudProvider.toLowerCase() == providers.GCP && config.cloudArch.toLowerCase() == architectures.ARM64) {
         throw new Error("Don't support gcp arm64 machines");
     } else if (!Object.values(pulumiGoals.pulumiGoals).includes(config.pulumiGoal.toLowerCase())) {
         throw new Error("Wrong goal");
@@ -38,7 +37,7 @@ try {
 
     // Clone the repository which need the runners and obtain the path to the config.yaml file.
     // If the repository is private we need an access token to be able to clone it.
-    const userRepoUrl = await buildUserRepoUrl(config);
+    const userRepoUrl = buildUserRepoUrl(config);
     await exec.exec('git', ['clone', `${userRepoUrl}`]);
 
     // Print all the environment variables for testing.
@@ -75,7 +74,7 @@ try {
 }
 }
 
-async function buildUserRepoUrl() {
+function buildUserRepoUrl() {
     let urlPrefix = "https://github.com/";
     return urlPrefix
         + github.context.payload.repository.owner.login + "/"

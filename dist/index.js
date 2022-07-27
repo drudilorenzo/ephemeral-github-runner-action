@@ -10334,33 +10334,30 @@ module.exports = { architectures };
 const core = __nccwpck_require__(2186);
 const github = __nccwpck_require__(5438);
 
-let config = null;
-let a = 0;
+let config;
 
-async function createConfig() {
+function createConfig() {
     const userRepoName = github.context.payload.repository.name;
     const homeDirectory = "/home/runner/work/" + userRepoName + "/" + userRepoName;
     
     return {
-        "configFilePath": homeDirectory + "/" + userRepoName + "/" + core.getInput('pulumi-config-path'),
-        "runnerRepoPath": homeDirectory + "/ephemeral-github-runner",
-        "pulumiGoal": core.getInput('pulumi-goal'),
-        "stackName": core.getInput('pulumi-stack-name'),
-        "cloudProvider": core.getInput('pulumi-cloud-provider'),
-        "cloudArch": core.getInput('cloud-architecture'),
-        "pulumiBackendUrl": core.getInput('pulumi-backend-url'),
-        "providerPath": homeDirectory + "/ephemeral-github-runner" + "/" + core.getInput('pulumi-cloud-provider')
+        configFilePath: homeDirectory + "/" + userRepoName + "/" + core.getInput('pulumi-config-path'),
+        runnerRepoPath: homeDirectory + "/ephemeral-github-runner",
+        pulumiGoal: core.getInput('pulumi-goal'),
+        stackName: core.getInput('pulumi-stack-name'),
+        cloudProvider: core.getInput('pulumi-cloud-provider'),
+        cloudArch: core.getInput('cloud-architecture'),
+        pulumiBackendUrl: core.getInput('pulumi-backend-url'),
+        providerPath: homeDirectory + "/ephemeral-github-runner" + "/" + core.getInput('pulumi-cloud-provider')
     }
 }
 
 // Return a dictionary with all the config values.
-async function getConfig() {
+function getConfig() {
   // if config is null, then we set it
   if (!config) {
-      config = await createConfig();
+      config = createConfig();
   }
-  a++;
-  core.info(a)
   return config;
 }
 
@@ -10369,14 +10366,14 @@ module.exports = {getConfig}
 /***/ }),
 
 /***/ 8842:
-/***/ ((module) => {
+/***/ ((__unused_webpack_module, exports) => {
 
 const providers = {
     AWS: "aws",
     GCP: "gcp"
-}
+};
 
-module.exports = { providers };
+exports.providers = providers;
 
 /***/ }),
 
@@ -10632,8 +10629,8 @@ const core = __nccwpck_require__(2186);
 const github = __nccwpck_require__(5438);
 const exec = __nccwpck_require__(1514);
 const wait = __nccwpck_require__(1312);
-const providers = __nccwpck_require__(8842);
-const architectures = __nccwpck_require__(4811);
+const { providers } = __nccwpck_require__(8842);
+const { architectures } = __nccwpck_require__(4811);
 const pulumiGoals = __nccwpck_require__(5687);
 const configuration = __nccwpck_require__(516);
 
@@ -10641,19 +10638,18 @@ async function run() {
 
 try {
     // Get all the inputs needed and construct a dictionary containing them.
-    const config = await configuration.getConfig();
-    await configuration.getConfig();
+    const config = configuration.getConfig();
 
     console.log(`Path: ${config.configFilePath} ${config.pulumiGoal} ${config.stackName} ${config.cloudProvider} ${config.cloudArch}`);
 
     // Simple check on provider, arch and goal.
     // There's no support for arm64 machine on gcp.
     core.info("Checking the inputs...");
-    if (!Object.values(providers.providers).includes(config.cloudProvider.toLowerCase())) {
+    if (!Object.values(providers).includes(config.cloudProvider.toLowerCase())) {
         throw new Error("Wrong provider");
-    } else if (!Object.values(architectures.architectures).includes(config.cloudArch.toLowerCase())) {
+    } else if (!Object.values(architectures).includes(config.cloudArch.toLowerCase())) {
         throw new Error("Wrong arch");
-    } else if (config.cloudProvider.toLowerCase() == providers.providers.Gcp && config.cloudArch.toLowerCase() == architectures.architectures.Arm64) {
+    } else if (config.cloudProvider.toLowerCase() == providers.GCP && config.cloudArch.toLowerCase() == architectures.ARM64) {
         throw new Error("Don't support gcp arm64 machines");
     } else if (!Object.values(pulumiGoals.pulumiGoals).includes(config.pulumiGoal.toLowerCase())) {
         throw new Error("Wrong goal");
@@ -10668,7 +10664,7 @@ try {
 
     // Clone the repository which need the runners and obtain the path to the config.yaml file.
     // If the repository is private we need an access token to be able to clone it.
-    const userRepoUrl = await buildUserRepoUrl(config);
+    const userRepoUrl = buildUserRepoUrl(config);
     await exec.exec('git', ['clone', `${userRepoUrl}`]);
 
     // Print all the environment variables for testing.
@@ -10705,7 +10701,7 @@ try {
 }
 }
 
-async function buildUserRepoUrl() {
+function buildUserRepoUrl() {
     let urlPrefix = "https://github.com/";
     return urlPrefix
         + github.context.payload.repository.owner.login + "/"
