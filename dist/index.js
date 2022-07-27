@@ -10678,7 +10678,7 @@ try {
     core.info("Deploying the runners...");
     await exec.exec('pulumi', ['login', `${CONFIG.pulumiBackendUrl}`], { cwd: CONFIG.runnerRepoPath });
     await exec.exec('pulumi', ['stack', 'init', `${CONFIG.stackName}`, '--secrets-provider=passphrase'], { cwd: CONFIG.providerPath });
-    await exec.exec('pulumi', ['stack', 'select', `${CONFIG.configstackName}`], { cwd: CONFIG.providerPath });
+    await exec.exec('pulumi', ['stack', 'select', `${CONFIG.stackName}`], { cwd: CONFIG.providerPath });
     await exec.exec('pulumi', ['stack', 'ls'], { cwd: CONFIG.providerPath });
     await exec.exec('pulumi', ['update', '--diff', '--config-file', `${CONFIG.configFilePath}`], { cwd: CONFIG.providerPath });
     core.info("Runners deployed!");
