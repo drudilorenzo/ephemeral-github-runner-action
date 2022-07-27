@@ -11,8 +11,6 @@ async function run() {
         // Get all the inputs needed and construct a dictionary containing them.
         const CONFIG = configuration.getConfig();
 
-        console.log(`Path: ${CONFIG.configFilePath} ${CONFIG.pulumiGoal} ${CONFIG.stackName} ${CONFIG.cloudProvider} ${CONFIG.cloudArch}`);
-
         // Simple check on provider, arch and goal.
         // There's no support for arm64 machine on gcp.
         core.info("Checking the inputs...");
@@ -42,14 +40,8 @@ async function run() {
         const USER_REPO_URL = buildUserRepoUrl(CONFIG);
         await exec.exec('git', ['clone', `${USER_REPO_URL}`]);
 
-        await exec.exec('cat', [`${CONFIG.configFilePath}`]);
-
-        // Print all the environment variables for testing.
-        await exec.exec('printenv');
-
         // // Execution flow for testing
         // core.info("Deploying the runners...");
-        // await exec.exec('pulumi', ['version']);
         // await exec.exec('pulumi', ['login', `${CONFIG.pulumiBackendUrl}`], { cwd: CONFIG.runnerRepoPath });
         // await exec.exec('pulumi', ['stack', 'init', `${CONFIG.stackName}`, '--secrets-provider=passphrase'], { cwd: CONFIG.providerPath });
         // await exec.exec('pulumi', ['stack', 'select', `${CONFIG.stackName}`], { cwd: CONFIG.providerPath });
