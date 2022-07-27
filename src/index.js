@@ -29,6 +29,10 @@ try {
     }
     core.info("Check passed!");
 
+    //Skip pulumi update check and confirmations.
+    process.env.PULUMI_SKIP_UPDATE_CHECK = true;
+    process.env.PULUMI_SKIP_CONFIRMATIONS = true;
+
     // Clone the runners repo and install the dependencies
     core.info("Cloning the repo and installing the dependencies...");
     const RUNNER_REPO_URL = "https://github.com/pavlovic-ivan/ephemeral-github-runner.git";

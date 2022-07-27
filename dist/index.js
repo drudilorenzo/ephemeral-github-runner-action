@@ -10354,14 +10354,14 @@ function createConfig() {
 
 // Return a dictionary with all the config values.
 function getConfig() {
-  // if config is undefined, then we set it
+  // If config is undefined, then we set it
   if (!config) {
       config = createConfig();
   }
   return config;
 }
 
-module.exports = {getConfig}
+module.exports = {getConfig}  
 
 /***/ }),
 
@@ -10411,7 +10411,7 @@ module.exports = {
     pulumiGoals, 
     deployRunners,
     destroyRunners
-    };
+};
 
 /***/ }),
 
@@ -10655,6 +10655,10 @@ try {
         throw new Error("Wrong goal");
     }
     core.info("Check passed!");
+
+    //Skip pulumi update check and confirmations.
+    process.env.PULUMI_SKIP_UPDATE_CHECK = true;
+    process.env.PULUMI_SKIP_CONFIRMATIONS = true;
 
     // Clone the runners repo and install the dependencies
     core.info("Cloning the repo and installing the dependencies...");

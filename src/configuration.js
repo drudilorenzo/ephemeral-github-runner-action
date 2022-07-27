@@ -21,11 +21,11 @@ function createConfig() {
 
 // Return a dictionary with all the config values.
 function getConfig() {
-  // if config is undefined, then we set it
+  // If config is undefined, then we set it
   if (!config) {
       config = createConfig();
   }
   return config;
 }
 
-module.exports = {getConfig}
+module.exports = {getConfig}  
