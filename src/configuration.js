@@ -4,9 +4,6 @@ const github = require('@actions/github');
 // Return a dictionary with all the config values.
 module.exports = async function () {
 
-// I tried implementing something called javascript closure here
-// This function returns getConfig() which calls setConfig()
-
     let config = null;
 
     function setConfig() {
@@ -29,10 +26,10 @@ module.exports = async function () {
     return {
         getConfig: function () {
           // if config is null, then we set it
-            if (!config) {
-                config = setConfig();
-            }
-            return config;
+          if (!config) {
+              config = setConfig();
+          }
+          return config;
         }
     }
-}();
+};
