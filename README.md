@@ -103,8 +103,6 @@ jobs:
               APP_ID: ${{ secrets.APP_ID }}
               APP_PRIVATE_KEY: ${{ secrets.APP_PRIVATE_KEY }}
               PULUMI_CONFIG_PASSPHRASE: ${{ secrets.PULUMI_CONFIG_PASSPHRASE }}
-              PULUMI_SKIP_UPDATE_CHECK: "true"
-              PULUMI_SKIP_CONFIRMATIONS: "true"
               CI: "false"
               AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
               AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -137,8 +135,6 @@ jobs:
               APP_ID: ${{ secrets.APP_ID }}
               APP_PRIVATE_KEY: ${{ secrets.APP_PRIVATE_KEY }}
               PULUMI_CONFIG_PASSPHRASE: ${{ secrets.PULUMI_CONFIG_PASSPHRASE }}
-              PULUMI_SKIP_UPDATE_CHECK: "true"
-              PULUMI_SKIP_CONFIRMATIONS: "true"
               CI: "false"
               GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
               GOOGLE_PROJECT: ${{ secrets.GOOGLE_PROJECT }}
