@@ -11,7 +11,7 @@ async function run() {
 
   try {
     // Get all the inputs needed and construct a dictionary containing them.
-    let config = await configuration();
+    let config = await configuration.getConfig();
 
     console.log(`Path: ${config.configFilePath} ${config.pulumiGoal} ${config.stackName} ${config.cloudProvider} ${config.cloudArch}`);
 
