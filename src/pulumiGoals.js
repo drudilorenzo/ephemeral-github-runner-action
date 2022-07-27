@@ -2,8 +2,8 @@ const core = require('@actions/core');
 const exec = require('@actions/exec');
 
 const pulumiGoals = {
-    Create: "create",
-    Destroy: "destroy"
+    CREATE: "create",
+    DESTROY: "destroy"
 }
 
 async function deployRunners(config) {
@@ -29,4 +29,4 @@ module.exports = {
     pulumiGoals, 
     deployRunners,
     destroyRunners
-};
+    };

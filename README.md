@@ -12,7 +12,6 @@ Before starting make sure:
 
 - You have an account set up in either AWS or GCP.
 - You have a [github app](https://github.com/pavlovic-ivan/ephemeral-github-runner/blob/main/QUICKSTART.md#github-app-setup) linked to the repository where the runners have to work (Same repo of the one inside config.yaml file).
-- You have a [github access token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token) (required only if the repository is private).
 - You have a ready backend on the cloud provider you want to use ('s3://bucket_name' or 'gs://bucket_name').
 - You have a machine image on the cloud provider you want to use.
 
@@ -56,14 +55,13 @@ It isn't mandatory to put the  config file in the root directory. Example: 'dir1
 
 ## Action's Inputs
 
-Everything below except Github access token is required. There are no default values provided.
+Everything below is required. There are no default values provided.
 
 - pulumi-config-path: A path to your Pulumi project config file
 - pulumi-goal: The name of the Pulumi goal. Supported values: create, destroy
 - pulumi-stack-name: The name of the Pulumi stack.
 - pulumi-cloud-provider: The name of the Pulumi cloud provider. Supported providers: aws, gcp
 - cloud-architecture: Supported architecture names: amd64 or arm64 (no support for gcp + arm64)
-- github-access-token: Github access token used to clone private repositories
 
 ## Action's Environment Variables
 
@@ -117,7 +115,6 @@ jobs:
               pulumi-stack-name: <Stack name>
               pulumi-cloud-provider: 'aws'
               cloud-architecture:  <Architecture to use. Supported: amd64, arm64>
-              github-access-token: ${{ secrets.ACCESS_TOKEN }}
               pulumi-backend-url: ${{ secrets.PULUMI_BACKEND_URL }}
 ```
 
@@ -153,7 +150,6 @@ jobs:
               pulumi-stack-name: <Stack name>
               pulumi-cloud-provider: 'gcp'
               cloud-architecture:  'amd64' #It's the only arch supported with gcp cloud provider.
-              github-access-token: ${{ secrets.ACCESS_TOKEN }}
               pulumi-backend-url: ${{ secrets.PULUMI_BACKEND_URL }}
 ```
 

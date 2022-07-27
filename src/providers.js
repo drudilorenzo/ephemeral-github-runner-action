@@ -1,6 +1,6 @@
 const providers = {
-    Aws: "aws",
-    Gcp: "gcp"
+    AWS: "aws",
+    GCP: "gcp"
 }
 
 module.exports = { providers };

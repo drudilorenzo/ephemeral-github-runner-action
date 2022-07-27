@@ -21,10 +21,6 @@ inputs:
     description: 'Supported architecture names: amd64 or arm64 (no support for gcp + arm64)' 
     required: true
     default: ''
-  github-access-token:
-    description: 'Github access token used to clone private repositories'
-    required: false
-    default: ''
   pulumi-backend-url:
     description: 'The url of the pulumi backend'
     required: true
