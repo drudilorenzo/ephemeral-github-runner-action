@@ -10366,14 +10366,14 @@ module.exports = {getConfig}
 /***/ }),
 
 /***/ 8842:
-/***/ ((__unused_webpack_module, exports) => {
+/***/ ((module) => {
 
 const providers = {
     AWS: "aws",
     GCP: "gcp"
 };
 
-exports.providers = providers;
+module.exports = { providers };
 
 /***/ }),
 

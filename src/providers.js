@@ -3,4 +3,4 @@ const providers = {
     GCP: "gcp"
 };
 
-exports.providers = providers;
+module.exports = { providers };
