@@ -68,8 +68,6 @@ Everything below is required. There are no default values provided.
 - APP_ID: GitHub App ID
 - APP_PRIVATE_KEY: GitHub App Private Key
 - PULUMI_CONFIG_PASSPHRASE: A passphrase that will be used to encrypt secrets
-- PULUMI_SKIP_UPDATE_CHECK: Skip pulumi's update check
-- PULUMI_SKIP_CONFIRMATIONS: Skip pulumi's confirmations
 - CI: Disable pulumi's CI service recognition
 
 AWS:
