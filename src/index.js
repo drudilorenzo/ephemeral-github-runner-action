@@ -66,10 +66,10 @@ async function run() {
         // core.info("Job finished");
 
         switch (CONFIG.pulumiGoal.toLowerCase()) {
-          case pulumiGoals.pulumiGoals.Create:
+          case pulumiGoals.pulumiGoals.CREATE:
             await pulumiGoals.deployRunners(CONFIG);
             break;
-          case pulumiGoals.pulumiGoals.Destroy:
+          case pulumiGoals.pulumiGoals.DESTROY:
             await pulumiGoals.destroyRunners(CONFIG);
             break;
         }
