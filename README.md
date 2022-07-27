@@ -75,7 +75,7 @@ Everything below is required. There are no default values provided.
 AWS:
 
 - PULUMI_BACKEND_URL: Path to the S3 bucket in format 's3://bucket_name'
-- AWS_ACCESS_KEY_ID: Path to the S3 bucket in format 's3://bucket_name'
+- AWS_ACCESS_KEY_ID: Your access key id received when account was created
 - AWS_SECRET_ACCESS_KEY: Your secret access key received when account was created
 - AWS_REGION: AWS region, eg. eu-west-2
 
