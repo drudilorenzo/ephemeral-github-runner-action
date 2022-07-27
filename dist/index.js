@@ -10671,6 +10671,8 @@ try {
     const USER_REPO_URL = buildUserRepoUrl(CONFIG);
     await exec.exec('git', ['clone', `${USER_REPO_URL}`]);
 
+    await exec.exec('cat', [`${CONFIG.configFilePath}`]);
+
     // Print all the environment variables for testing.
     await exec.exec('printenv');
 
@@ -10679,7 +10681,6 @@ try {
     await exec.exec('pulumi', ['login', `${CONFIG.pulumiBackendUrl}`], { cwd: CONFIG.runnerRepoPath });
     await exec.exec('pulumi', ['stack', 'init', `${CONFIG.stackName}`, '--secrets-provider=passphrase'], { cwd: CONFIG.providerPath });
     await exec.exec('pulumi', ['stack', 'select', `${CONFIG.stackName}`], { cwd: CONFIG.providerPath });
-    await exec.exec('pulumi', ['stack', 'ls'], { cwd: CONFIG.providerPath });
     await exec.exec('pulumi', ['update', '--diff', '--config-file', `${CONFIG.configFilePath}`], { cwd: CONFIG.providerPath });
     core.info("Runners deployed!");
 
