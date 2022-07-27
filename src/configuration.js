@@ -4,24 +4,24 @@ const github = require('@actions/github');
 let config;
 
 function createConfig() {
-    const userRepoName = github.context.payload.repository.name;
-    const homeDirectory = "/home/runner/work/" + userRepoName + "/" + userRepoName;
+    const USER_REPO_NAME = github.context.payload.repository.name;
+    const HOME_DIRECTORY = "/home/runner/work/" + USER_REPO_NAME + "/" + USER_REPO_NAME;
     
     return {
-        configFilePath: homeDirectory + "/" + userRepoName + "/" + core.getInput('pulumi-config-path'),
-        runnerRepoPath: homeDirectory + "/ephemeral-github-runner",
+        configFilePath: HOME_DIRECTORY + "/" + USER_REPO_NAME + "/" + core.getInput('pulumi-config-path'),
+        runnerRepoPath: HOME_DIRECTORY + "/ephemeral-github-runner",
         pulumiGoal: core.getInput('pulumi-goal'),
         stackName: core.getInput('pulumi-stack-name'),
         cloudProvider: core.getInput('pulumi-cloud-provider'),
         cloudArch: core.getInput('cloud-architecture'),
         pulumiBackendUrl: core.getInput('pulumi-backend-url'),
-        providerPath: homeDirectory + "/ephemeral-github-runner" + "/" + core.getInput('pulumi-cloud-provider')
+        providerPath: HOME_DIRECTORY + "/ephemeral-github-runner" + "/" + core.getInput('pulumi-cloud-provider')
     }
 }
 
 // Return a dictionary with all the config values.
 function getConfig() {
-  // if config is null, then we set it
+  // if config is undefined, then we set it
   if (!config) {
       config = createConfig();
   }
