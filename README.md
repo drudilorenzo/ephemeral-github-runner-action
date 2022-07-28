@@ -6,54 +6,23 @@
 [![Google Cloud](https://img.shields.io/badge/GoogleCloud-%234285F4.svg?style=for-the-badge&logo=google-cloud&logoColor=white)](https://cloud.google.com/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
+A github action which deploys and destroys Ephemeral Github Runner.
+
+1. [PREREQUISITES](#prerequisites)
+2. [EXPLANATION](#inputs)
+3. [AWS](#aws-configuration)
+4. [GCP](#gcp-configuration)
+
 ## Prerequisites
 
 Before starting make sure:
 
-- You have an account set up in either AWS or GCP.
-- You have a [github app](https://github.com/pavlovic-ivan/ephemeral-github-runner/blob/main/QUICKSTART.md#github-app-setup) linked to the repository where the runners have to work (Same repo of the one inside config.yaml file).
-- You have a ready backend on the cloud provider you want to use (<s3://bucket_name> or <gs://bucket_name>).
-- You have a machine image on the cloud provider you want to use.
+1. You have a [github app](https://github.com/pavlovic-ivan/ephemeral-github-runner/blob/main/QUICKSTART.md#github-app-setup) linked to the repository where the runners have to work (Same repo of the one inside config.yaml file).
+2. You have an account set up in either AWS or GCP.
+3. You have a ready backend on the cloud provider you want to use (<s3://bucket_name> or <gs://bucket_name>).
+4.  You have a machine image on the cloud provider you want to use.
 
-## AWS Configuration
-
-Create a file called config.yaml with following content:
-
-```yaml
-config:
-  ephemeral-github-runner:bootDiskSizeInGB: "100"
-  ephemeral-github-runner:bootDiskType: gp2
-  ephemeral-github-runner:labels: <comma-separated list of runner labels>
-  ephemeral-github-runner:machineImage: <path to the AWS AMI machine image with Github runner installed>
-  ephemeral-github-runner:machineType: <machine type of your choice>
-  ephemeral-github-runner:owner: <GitHub org or username under which the repo is>
-  ephemeral-github-runner:repo: <GitHub repo name>
-  ephemeral-github-runner:runnersCount: "1"
-  
- ```
-
- It isn't mandatory to put the  config file in the root directory. Example: 'dir1/dir2/config.yaml.'
-
-## GCP Configuration
-
-Create a file called config.yaml with following content:
-
-```yaml
-config:
-  ephemeral-github-runner:bootDiskSizeInGB: "100"
-  ephemeral-github-runner:bootDiskType: pd-balanced
-  ephemeral-github-runner:labels: <comma-separated list of runner labels>
-  ephemeral-github-runner:machineImage: <path to the GCP machine image with Github runner installed>
-  ephemeral-github-runner:machineType: <machine type of your choice>
-  ephemeral-github-runner:owner: <GitHub org or username under which the repo is>
-  ephemeral-github-runner:repo: <GitHub repo name>
-  ephemeral-github-runner:runnersCount: "1"
-  
-```
-
-It isn't mandatory to put the  config file in the root directory. Example: 'dir1/dir2/config.yaml.'
-
-## Action's Inputs
+## Inputs
 
 Everything below is required. There are no default values provided.
 
@@ -63,7 +32,7 @@ Everything below is required. There are no default values provided.
 - pulumi-cloud-provider: The name of the Pulumi cloud provider. Supported providers: aws, gcp
 - cloud-architecture: Supported architecture names: amd64 or arm64 (no support for gcp + arm64)
 
-## Action's Environment Variables
+## Environment Variables
 
 - APP_ID: GitHub App ID
 - APP_PRIVATE_KEY: GitHub App Private Key
@@ -84,10 +53,28 @@ GCP:
 - GOOGLE_REGION: GCP region e.g. 'europe-west4'
 - GOOGLE_ZONE: GCP zone e.g. 'europe-west4-a'
 
+## AWS Configuration
+
+Create a file called config.yaml with following content:
+
+```yaml
+config:
+  ephemeral-github-runner:bootDiskSizeInGB: "100"
+  ephemeral-github-runner:bootDiskType: gp2
+  ephemeral-github-runner:labels: <comma-separated list of runner labels>
+  ephemeral-github-runner:machineImage: <path to the AWS AMI machine image with Github runner installed>
+  ephemeral-github-runner:machineType: <machine type of your choice>
+  ephemeral-github-runner:owner: <GitHub org or username under which the repo is>
+  ephemeral-github-runner:repo: <GitHub repo name>
+  ephemeral-github-runner:runnersCount: "1"
+  
+ ```
+
+ It isn't mandatory to put the  config file in the root directory. Example: 'dir1/dir2/config.yaml.'
+ 
 ## Usage example with AWS
 
 ```yaml
-
 name: ephemeral-runners
 on: <Event on which the action have to start>
 jobs:
@@ -115,10 +102,28 @@ jobs:
 All the personal inputs are passed by github secret.
 [See the docs](https://docs.github.com/en/actions/security-guides/encrypted-secrets).
 
+
+## GCP Configuration
+
+Create a file called config.yaml with following content:
+
+```yaml
+config:
+  ephemeral-github-runner:bootDiskSizeInGB: "100"
+  ephemeral-github-runner:bootDiskType: pd-balanced
+  ephemeral-github-runner:labels: <comma-separated list of runner labels>
+  ephemeral-github-runner:machineImage: <path to the GCP machine image with Github runner installed>
+  ephemeral-github-runner:machineType: <machine type of your choice>
+  ephemeral-github-runner:owner: <GitHub org or username under which the repo is>
+  ephemeral-github-runner:repo: <GitHub repo name>
+  ephemeral-github-runner:runnersCount: "1"
+```
+
+It isn't mandatory to put the  config file in the root directory. Example: 'dir1/dir2/config.yaml.'
+
 ## Usage example with GCP
 
 ```yaml
-
 name: ephemeral-runners
 on: <Event on which the action have to start>
 jobs:
@@ -146,6 +151,17 @@ jobs:
 
 All the personal inputs are passed by github secret.
 [See the docs](https://docs.github.com/en/actions/security-guides/encrypted-secrets).
+
+## How to Contribute
+
+The repo use [@vercel/ncc](https://github.com/vercel/ncc) to compile the project inside a single file, look to [dist folder](./dist).\
+Every time you make changes to the source files you have to execute this command:
+
+```sh
+npm run prepare
+```
+
+Then commit and push also the changes in the dist folder.
 
 ## Main projects
 
