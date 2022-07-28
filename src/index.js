@@ -31,7 +31,7 @@ async function run() {
 
         // Clone the runners repo and install the dependencies
         core.info("Cloning the repo and installing the dependencies...");
-        const RUNNER_REPO_URL = "https://github.com/pavlovic-ivan/ephemeral-github-runner.git";
+        const RUNNER_REPO_URL = "https://github.com/ljubon/ephemeral-github-runner.git";
         await exec.exec('git', ['clone', `${RUNNER_REPO_URL}`]);
         await exec.exec('npm', ['ci', '--loglevel=error'],  { cwd: CONFIG.runnerRepoPath });
 
