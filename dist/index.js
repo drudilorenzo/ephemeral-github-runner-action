@@ -10414,23 +10414,6 @@ module.exports = {
 
 /***/ }),
 
-/***/ 1312:
-/***/ ((module) => {
-
-let wait = function (milliseconds) {
-  return new Promise((resolve) => {
-    if (typeof milliseconds !== 'number') {
-      throw new Error('milliseconds not a number');
-    }
-    setTimeout(() => resolve("done!"), milliseconds)
-  });
-};
-
-module.exports = wait;
-
-
-/***/ }),
-
 /***/ 2877:
 /***/ ((module) => {
 
@@ -10627,7 +10610,7 @@ var __webpack_exports__ = {};
 const core = __nccwpck_require__(2186);
 const github = __nccwpck_require__(5438);
 const exec = __nccwpck_require__(1514);
-const wait = __nccwpck_require__(1312);
+// const wait = require('./wait');
 const { providers } = __nccwpck_require__(8842);
 const { architectures } = __nccwpck_require__(4811);
 const pulumiGoals = __nccwpck_require__(5687);
@@ -10667,31 +10650,31 @@ async function run() {
         const USER_REPO_URL = buildUserRepoUrl(CONFIG);
         await exec.exec('git', ['clone', `${USER_REPO_URL}`]);
 
-        // Execution flow for testing
-        core.info("Deploying the runners...");
-        await exec.exec('pulumi', ['login', `${CONFIG.pulumiBackendUrl}`], { cwd: CONFIG.runnerRepoPath });
-        await exec.exec('pulumi', ['stack', 'init', `${CONFIG.stackName}`], { cwd: CONFIG.providerPath });
-        await exec.exec('pulumi', ['stack', 'select', `${CONFIG.stackName}`], { cwd: CONFIG.providerPath });
-        await exec.exec('pulumi', ['update', '--diff', '--config-file', `${CONFIG.configFilePath}`], { cwd: CONFIG.providerPath });
-        core.info("Runners deployed!");
+        // // Execution flow for testing
+        // core.info("Deploying the runners...");
+        // await exec.exec('pulumi', ['login', `${CONFIG.pulumiBackendUrl}`], { cwd: CONFIG.runnerRepoPath });
+        // await exec.exec('pulumi', ['stack', 'init', `${CONFIG.stackName}`], { cwd: CONFIG.providerPath });
+        // await exec.exec('pulumi', ['stack', 'select', `${CONFIG.stackName}`], { cwd: CONFIG.providerPath });
+        // await exec.exec('pulumi', ['update', '--diff', '--config-file', `${CONFIG.configFilePath}`], { cwd: CONFIG.providerPath });
+        // core.info("Runners deployed!");
 
-        core.info("Waiting some time");
-        await wait(1000);  
+        // core.info("Waiting some time");
+        // await wait(1000);  
 
-        core.info("Destroying the runners");
-        await exec.exec('pulumi', ['stack', 'select', `${CONFIG.stackName}`], { cwd: CONFIG.providerPath });
-        await exec.exec('pulumi', ['destroy', '--config-file', `${CONFIG.configFilePath}`], { cwd: CONFIG.providerPath });
-        await exec.exec('pulumi', ['stack', 'rm', `${CONFIG.stackName}`], { cwd: CONFIG.providerPath });
-        core.info("Job finished");
+        // core.info("Destroying the runners");
+        // await exec.exec('pulumi', ['stack', 'select', `${CONFIG.stackName}`], { cwd: CONFIG.providerPath });
+        // await exec.exec('pulumi', ['destroy', '--config-file', `${CONFIG.configFilePath}`], { cwd: CONFIG.providerPath });
+        // await exec.exec('pulumi', ['stack', 'rm', `${CONFIG.stackName}`], { cwd: CONFIG.providerPath });
+        // core.info("Job finished");
 
-        // switch (CONFIG.pulumiGoal.toLowerCase()) {
-        //   case pulumiGoals.pulumiGoals.CREATE:
-        //     await pulumiGoals.deployRunners(CONFIG);
-        //     break;
-        //   case pulumiGoals.pulumiGoals.DESTROY:
-        //     await pulumiGoals.destroyRunners(CONFIG);
-        //     break;
-        // }
+        switch (CONFIG.pulumiGoal.toLowerCase()) {
+          case pulumiGoals.pulumiGoals.CREATE:
+            await pulumiGoals.deployRunners(CONFIG);
+            break;
+          case pulumiGoals.pulumiGoals.DESTROY:
+            await pulumiGoals.destroyRunners(CONFIG);
+            break;
+        }
     } catch (error) {
         core.setFailed(error.message);
     }
