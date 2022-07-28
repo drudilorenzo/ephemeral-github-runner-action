@@ -1,7 +1,7 @@
 const core = require('@actions/core');
 const github = require('@actions/github');
 const exec = require('@actions/exec');
-const wait = require('./waits');
+const wait = require('./wait');
 const { providers } = require('./providers');
 const { architectures } = require('./architectures');
 const pulumiGoals = require('./pulumiGoals');

@@ -10414,10 +10414,19 @@ module.exports = {
 
 /***/ }),
 
-/***/ 7034:
+/***/ 1312:
 /***/ ((module) => {
 
-module.exports = eval("require")("./waits");
+let wait = function (milliseconds) {
+  return new Promise((resolve) => {
+    if (typeof milliseconds !== 'number') {
+      throw new Error('milliseconds not a number');
+    }
+    setTimeout(() => resolve("done!"), milliseconds)
+  });
+};
+
+module.exports = wait;
 
 
 /***/ }),
@@ -10618,7 +10627,7 @@ var __webpack_exports__ = {};
 const core = __nccwpck_require__(2186);
 const github = __nccwpck_require__(5438);
 const exec = __nccwpck_require__(1514);
-const wait = __nccwpck_require__(7034);
+const wait = __nccwpck_require__(1312);
 const { providers } = __nccwpck_require__(8842);
 const { architectures } = __nccwpck_require__(4811);
 const pulumiGoals = __nccwpck_require__(5687);
