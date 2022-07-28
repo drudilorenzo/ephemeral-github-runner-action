@@ -1,7 +1,6 @@
 const core = require('@actions/core');
 const github = require('@actions/github');
 const exec = require('@actions/exec');
-// const wait = require('./wait');
 const { providers } = require('./providers');
 const { architectures } = require('./architectures');
 const pulumiGoals = require('./pulumiGoals');
@@ -40,23 +39,6 @@ async function run() {
         // If the repository is private we need an access token to be able to clone it.
         const USER_REPO_URL = buildUserRepoUrl(CONFIG);
         await exec.exec('git', ['clone', `${USER_REPO_URL}`]);
-
-        // // Execution flow for testing
-        // core.info("Deploying the runners...");
-        // await exec.exec('pulumi', ['login', `${CONFIG.pulumiBackendUrl}`], { cwd: CONFIG.runnerRepoPath });
-        // await exec.exec('pulumi', ['stack', 'init', `${CONFIG.stackName}`], { cwd: CONFIG.providerPath });
-        // await exec.exec('pulumi', ['stack', 'select', `${CONFIG.stackName}`], { cwd: CONFIG.providerPath });
-        // await exec.exec('pulumi', ['update', '--diff', '--config-file', `${CONFIG.configFilePath}`], { cwd: CONFIG.providerPath });
-        // core.info("Runners deployed!");
-
-        // core.info("Waiting some time");
-        // await wait(1000);  
-
-        // core.info("Destroying the runners");
-        // await exec.exec('pulumi', ['stack', 'select', `${CONFIG.stackName}`], { cwd: CONFIG.providerPath });
-        // await exec.exec('pulumi', ['destroy', '--config-file', `${CONFIG.configFilePath}`], { cwd: CONFIG.providerPath });
-        // await exec.exec('pulumi', ['stack', 'rm', `${CONFIG.stackName}`], { cwd: CONFIG.providerPath });
-        // core.info("Job finished");
 
         switch (CONFIG.pulumiGoal.toLowerCase()) {
           case pulumiGoals.pulumiGoals.CREATE:
