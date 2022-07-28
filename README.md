@@ -20,7 +20,7 @@ Before starting make sure:
 1. You have a [github app](https://github.com/pavlovic-ivan/ephemeral-github-runner/blob/main/QUICKSTART.md#github-app-setup) linked to the repository where the runners have to work (Same repo of the one inside config.yaml file).
 2. You have an account set up in either AWS or GCP.
 3. You have a ready backend on the cloud provider you want to use (<s3://bucket_name> or <gs://bucket_name>).
-4.  You have a machine image on the cloud provider you want to use.
+4. You have a machine image on the cloud provider you want to use.
 
 ## Inputs
 
@@ -71,7 +71,7 @@ config:
  ```
 
  It isn't mandatory to put the  config file in the root directory. Example: 'dir1/dir2/config.yaml.'
- 
+
 ## Usage example with AWS
 
 ```yaml
@@ -101,7 +101,6 @@ jobs:
 
 All the personal inputs are passed by github secret.
 [See the docs](https://docs.github.com/en/actions/security-guides/encrypted-secrets).
-
 
 ## GCP Configuration
 
