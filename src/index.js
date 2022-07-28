@@ -15,13 +15,13 @@ async function run() {
         // There's no support for arm64 machine on gcp.
         core.info("Checking the inputs...");
         if (!Object.values(providers).includes(CONFIG.cloudProvider.toLowerCase())) {
-            throw new Error("Wrong provider");
+            throw new Error("Wrong provider. Supported: aws, gcp");
         } else if (!Object.values(architectures).includes(CONFIG.cloudArch.toLowerCase())) {
-            throw new Error("Wrong arch");
+            throw new Error("Wrong arch. Supported: arm64, amd64");
         } else if (CONFIG.cloudProvider.toLowerCase() == providers.GCP && CONFIG.cloudArch.toLowerCase() == architectures.ARM64) {
             throw new Error("Don't support gcp arm64 machines");
         } else if (!Object.values(pulumiGoals.pulumiGoals).includes(CONFIG.pulumiGoal.toLowerCase())) {
-            throw new Error("Wrong goal");
+            throw new Error("Wrong goal. Supported: create, destroy");
         }
         core.info("Check passed!");
 
