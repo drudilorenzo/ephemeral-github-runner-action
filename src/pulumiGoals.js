@@ -2,8 +2,8 @@ const core = require('@actions/core');
 const exec = require('@actions/exec');
 
 const pulumiGoals = {
-    CREATE: "create",
-    DESTROY: "destroy"
+    CREATE: "CREATE",
+    DESTROY: "DESTROY"
 };
 
 async function deployRunners(CONFIG) {

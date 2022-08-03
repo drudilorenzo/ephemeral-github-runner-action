@@ -14,13 +14,13 @@ async function run() {
         // Simple check on provider, arch and goal.
         // There's no support for arm64 machine on gcp.
         core.info("Checking the inputs...");
-        if (!Object.values(providers).includes(CONFIG.cloudProvider.toLowerCase())) {
+        if (!Object.values(providers).includes(CONFIG.cloudProvider.toUpperCase())) {
             throw new Error("Wrong provider. Supported: aws, gcp");
-        } else if (!Object.values(architectures).includes(CONFIG.cloudArch.toLowerCase())) {
+        } else if (!Object.values(architectures).includes(CONFIG.cloudArch.toUpperCase())) {
             throw new Error("Wrong arch. Supported: arm64, amd64");
-        } else if (CONFIG.cloudProvider.toLowerCase() == providers.GCP && CONFIG.cloudArch.toLowerCase() == architectures.ARM64) {
+        } else if (CONFIG.cloudProvider.toUpperCase() == providers.GCP && CONFIG.cloudArch.toUpperCase() == architectures.ARM64) {
             throw new Error("Don't support gcp arm64 machines");
-        } else if (!Object.values(pulumiGoals.pulumiGoals).includes(CONFIG.pulumiGoal.toLowerCase())) {
+        } else if (!Object.values(pulumiGoals.pulumiGoals).includes(CONFIG.pulumiGoal.toUpperCase())) {
             throw new Error("Wrong goal. Supported: create, destroy");
         }
         core.info("Check passed!");
