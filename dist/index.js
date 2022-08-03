@@ -10320,8 +10320,8 @@ function wrappy (fn, cb) {
 /***/ ((module) => {
 
 const architectures = {
-    ARM64: "arm64",
-    AMD64: "amd64"
+    ARM64: "ARM64",
+    AMD64: "AMD64"
 };
 
 module.exports = { architectures };
@@ -10340,15 +10340,18 @@ function createConfig() {
     const USER_REPO_NAME = github.context.payload.repository.name;
     const HOME_DIRECTORY = "/home/runner/work/" + USER_REPO_NAME + "/" + USER_REPO_NAME;
     
+    // Switch values to upper case to prevent wrong inputs
     return {
-        configFilePath: HOME_DIRECTORY + "/" + USER_REPO_NAME + "/" + core.getInput('pulumi-config-path'),
+        configFilePath: HOME_DIRECTORY + "/" + USER_REPO_NAME + "/" 
+            + core.getInput('pulumi-config-path'),
         runnerRepoPath: HOME_DIRECTORY + "/ephemeral-github-runner",
-        pulumiGoal: core.getInput('pulumi-goal'),
+        pulumiGoal: core.getInput('pulumi-goal').toUpperCase(),
         stackName: core.getInput('pulumi-stack-name'),
-        cloudProvider: core.getInput('pulumi-cloud-provider'),
-        cloudArch: core.getInput('cloud-architecture'),
+        cloudProvider: core.getInput('pulumi-cloud-provider').toUpperCase(),
+        cloudArch: core.getInput('cloud-architecture').toUpperCase(),
         pulumiBackendUrl: core.getInput('pulumi-backend-url'),
-        providerPath: HOME_DIRECTORY + "/ephemeral-github-runner" + "/" + core.getInput('pulumi-cloud-provider')
+        providerPath: HOME_DIRECTORY + "/ephemeral-github-runner" + "/" 
+            + core.getInput('pulumi-cloud-provider').toLowerCase
     }
 }
 
@@ -10369,8 +10372,8 @@ module.exports = {getConfig};
 /***/ ((module) => {
 
 const providers = {
-    AWS: "aws",
-    GCP: "gcp"
+    AWS: "AWS",
+    GCP: "GCP"
 };
 
 module.exports = { providers };
@@ -10384,8 +10387,8 @@ const core = __nccwpck_require__(2186);
 const exec = __nccwpck_require__(1514);
 
 const pulumiGoals = {
-    CREATE: "create",
-    DESTROY: "destroy"
+    CREATE: "CREATE",
+    DESTROY: "DESTROY"
 };
 
 async function deployRunners(CONFIG) {
@@ -10393,7 +10396,8 @@ async function deployRunners(CONFIG) {
         core.info("Deploying the runners...");
         await exec.exec('pulumi', ['login', `${CONFIG.pulumiBackendUrl}`], { cwd: CONFIG.runnerRepoPath });
         await exec.exec('pulumi', ['stack', 'init', `${CONFIG.stackName}`], { cwd: CONFIG.providerPath });
-        await exec.exec('pulumi', ['update', '--diff', '--config-file', `${CONFIG.configFilePath}`], { cwd: CONFIG.providerPath });
+        await exec.exec('pulumi', ['update', '--diff', '--config-file', `${CONFIG.configFilePath}`], 
+            { cwd: CONFIG.providerPath });
         core.info("Runners deployed!");
     } catch (error) {
         core.setFailed(error.message);
@@ -10405,7 +10409,8 @@ async function destroyRunners(CONFIG) {
         core.info("Destroying the runners");
         await exec.exec('pulumi', ['login', `${CONFIG.pulumiBackendUrl}`], { cwd: CONFIG.runnerRepoPath });
         await exec.exec('pulumi', ['stack', 'select', `${CONFIG.stackName}`], { cwd: CONFIG.providerPath });
-        await exec.exec('pulumi', ['destroy', '--config-file', `${CONFIG.configFilePath}`], { cwd: CONFIG.providerPath });
+        await exec.exec('pulumi', ['destroy', '--config-file', `${CONFIG.configFilePath}`], 
+            { cwd: CONFIG.providerPath });
         await exec.exec('pulumi', ['stack', 'rm', `${CONFIG.stackName}`], { cwd: CONFIG.providerPath });
         core.info("Job finished");
     } catch (error) {
@@ -10630,13 +10635,13 @@ async function run() {
         // Simple check on provider, arch and goal.
         // There's no support for arm64 machine on gcp.
         core.info("Checking the inputs...");
-        if (!Object.values(providers).includes(CONFIG.cloudProvider.toLowerCase())) {
+        if (!Object.values(providers).includes(CONFIG.cloudProvider)) {
             throw new Error("Wrong provider. Supported: aws, gcp");
-        } else if (!Object.values(architectures).includes(CONFIG.cloudArch.toLowerCase())) {
+        } else if (!Object.values(architectures).includes(CONFIG.cloudArch)) {
             throw new Error("Wrong arch. Supported: arm64, amd64");
-        } else if (CONFIG.cloudProvider.toLowerCase() == providers.GCP && CONFIG.cloudArch.toLowerCase() == architectures.ARM64) {
+        } else if (CONFIG.cloudProvider == providers.GCP && CONFIG.cloudArch == architectures.ARM64) {
             throw new Error("Don't support gcp arm64 machines");
-        } else if (!Object.values(pulumiGoals.pulumiGoals).includes(CONFIG.pulumiGoal.toLowerCase())) {
+        } else if (!Object.values(pulumiGoals.pulumiGoals).includes(CONFIG.pulumiGoal)) {
             throw new Error("Wrong goal. Supported: create, destroy");
         }
         core.info("Check passed!");
@@ -10656,7 +10661,7 @@ async function run() {
         const USER_REPO_URL = buildUserRepoUrl(CONFIG);
         await exec.exec('git', ['clone', `${USER_REPO_URL}`]);
 
-        switch (CONFIG.pulumiGoal.toLowerCase()) {
+        switch (CONFIG.pulumiGoal) {
           case pulumiGoals.pulumiGoals.CREATE:
             await pulumiGoals.deployRunners(CONFIG);
             break;
