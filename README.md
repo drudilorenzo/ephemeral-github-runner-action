@@ -1,116 +1,181 @@
-# Create a JavaScript Action
+# JavaScript Github Action to deploy and destroy self-hosted runners
 
-<p align="center">
-  <a href="https://github.com/actions/javascript-action/actions"><img alt="javscript-action status" src="https://github.com/actions/javascript-action/workflows/units-test/badge.svg"></a>
-</p>
+[![GitHub Actions](https://img.shields.io/badge/github%20actions-%232671E5.svg?style=for-the-badge&logo=githubactions&logoColor=white)](https://github.com/features/actions)
+[![JavaScript](https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E)](https://en.wikipedia.org/wiki/JavaScript)
+[![AWS](https://img.shields.io/badge/AWS-%23FF9900.svg?style=for-the-badge&logo=amazon-aws&logoColor=white)](https://aws.amazon.com/)
+[![Google Cloud](https://img.shields.io/badge/GoogleCloud-%234285F4.svg?style=for-the-badge&logo=google-cloud&logoColor=white)](https://cloud.google.com/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-Use this template to bootstrap the creation of a JavaScript action.:rocket:
+A github action which deploys and destroys Ephemeral Github Runner.
 
-This template includes tests, linting, a validation workflow, publishing, and versioning guidance.
+1. [PREREQUISITES](#prerequisites)
+2. [EXPLANATION](#inputs)
+3. [AWS](#aws-configuration)
+4. [GCP](#gcp-configuration)
 
-If you are new, there's also a simpler introduction.  See the [Hello World JavaScript Action](https://github.com/actions/hello-world-javascript-action)
+## Prerequisites
 
-## Create an action from this template
+Before starting make sure:
 
-Click the `Use this Template` and provide the new repo details for your action
+1. You have a [github app](https://github.com/pavlovic-ivan/ephemeral-github-runner/blob/main/QUICKSTART.md#github-app-setup) linked to the repository where the runners have to work (Same repo of the one inside config.yaml file).
+2. You have an account set up in either AWS or GCP.
+3. You have a ready backend on the cloud provider you want to use (<s3://bucket_name> or <gs://bucket_name>).
+4. You have a machine image on the cloud provider you want to use.
 
-## Code in Main
+## Inputs
 
-Install the dependencies
+Everything below is required. There are no default values provided.
 
-```bash
-npm install
+- pulumi-config-path: A path to your Pulumi project config file
+- pulumi-goal: The name of the Pulumi goal. Supported values: create, destroy
+- pulumi-stack-name: The name of the Pulumi stack.
+- pulumi-cloud-provider: The name of the Pulumi cloud provider. Supported providers: aws, gcp
+- cloud-architecture: Supported architecture names: amd64 or arm64 (no support for gcp + arm64)
+
+## Environment Variables
+
+- APP_ID: GitHub App ID
+- APP_PRIVATE_KEY: GitHub App Private Key
+- PULUMI_CONFIG_PASSPHRASE: A passphrase that will be used to encrypt secrets
+
+AWS:
+
+- PULUMI_BACKEND_URL: Path to the S3 bucket in format -> s3://bucket_name
+- AWS_ACCESS_KEY_ID: Your access key id received when account was created
+- AWS_SECRET_ACCESS_KEY: Your secret access key received when account was created
+- AWS_REGION: AWS region, eg. eu-west-2
+
+GCP:
+
+- PULUMI_BACKEND_URL: Path to the GS bucket in format -> gs://bucket_name
+- GOOGLE_CREDENTIALS:  GCP credentials
+- GOOGLE_PROJECT: GCP project ID
+- GOOGLE_REGION: GCP region e.g. 'europe-west4'
+- GOOGLE_ZONE: GCP zone e.g. 'europe-west4-a'
+
+## AWS Configuration
+
+Create a file called config.yaml with following content:
+
+```yaml
+config:
+  ephemeral-github-runner:bootDiskSizeInGB: "100"
+  ephemeral-github-runner:bootDiskType: gp2
+  ephemeral-github-runner:labels: <comma-separated list of runner labels>
+  ephemeral-github-runner:machineImage: <path to the AWS AMI machine image with Github runner installed>
+  ephemeral-github-runner:machineType: <machine type of your choice>
+  ephemeral-github-runner:owner: <GitHub org or username under which the repo is>
+  ephemeral-github-runner:repo: <GitHub repo name>
+  ephemeral-github-runner:runnersCount: "1"
+  
+ ```
+
+ It isn't mandatory to put the  config file in the root directory. Example: 'dir1/dir2/config.yaml.'
+
+## Usage example with AWS
+
+```yaml
+name: ephemeral-runners
+on: <Event on which the action have to start>
+jobs:
+    manage-runners:
+        runs-on: ubuntu-latest
+        steps:
+          - uses: LorenzoDrudi/ephemeral-github-runner-action@<version to use>
+            env:
+              PULUMI_BACKEND_URL: ${{ secrets.PULUMI_BACKEND_URL }}
+              APP_ID: ${{ secrets.APP_ID }}
+              APP_PRIVATE_KEY: ${{ secrets.APP_PRIVATE_KEY }}
+              PULUMI_CONFIG_PASSPHRASE: ${{ secrets.PULUMI_CONFIG_PASSPHRASE }}
+              AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+              AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+              AWS_REGION: ${{ secrets.AWS_REGION }}
+            with:
+              pulumi-config-path: <Path to the config file. e.g. dir1/dir2/config.yaml>
+              pulumi-goal:  <Pulumi goal. Supported: create, destroy>
+              pulumi-stack-name: <Stack name>
+              pulumi-cloud-provider: 'aws'
+              cloud-architecture:  <Architecture to use. Supported: amd64, arm64>
+              pulumi-backend-url: ${{ secrets.PULUMI_BACKEND_URL }}
 ```
 
-Run the tests :heavy_check_mark:
+All the personal inputs are passed by github secret.
+[See the docs](https://docs.github.com/en/actions/security-guides/encrypted-secrets).
 
-```bash
-$ npm test
+## GCP Configuration
 
- PASS  ./index.test.js
-  ✓ throws invalid number (3ms)
-  ✓ wait 500 ms (504ms)
-  ✓ test runs (95ms)
-...
+Create a file called config.yaml with following content:
+
+```yaml
+config:
+  ephemeral-github-runner:bootDiskSizeInGB: "100"
+  ephemeral-github-runner:bootDiskType: pd-balanced
+  ephemeral-github-runner:labels: <comma-separated list of runner labels>
+  ephemeral-github-runner:machineImage: <path to the GCP machine image with Github runner installed>
+  ephemeral-github-runner:machineType: <machine type of your choice>
+  ephemeral-github-runner:owner: <GitHub org or username under which the repo is>
+  ephemeral-github-runner:repo: <GitHub repo name>
+  ephemeral-github-runner:runnersCount: "1"
 ```
 
-## Change action.yml
+It isn't mandatory to put the  config file in the root directory. Example: 'dir1/dir2/config.yaml.'
 
-The action.yml defines the inputs and output for your action.
+## Usage example with GCP
 
-Update the action.yml with your name, description, inputs and outputs for your action.
-
-See the [documentation](https://help.github.com/en/articles/metadata-syntax-for-github-actions)
-
-## Change the Code
-
-Most toolkit and CI/CD operations involve async operations so the action is run in an async function.
-
-```javascript
-const core = require('@actions/core');
-...
-
-async function run() {
-  try {
-      ...
-  }
-  catch (error) {
-    core.setFailed(error.message);
-  }
-}
-
-run()
+```yaml
+name: ephemeral-runners
+on: <Event on which the action have to start>
+jobs:
+    manage-runners:
+        runs-on: ubuntu-latest
+        steps:
+          - uses: LorenzoDrudi/ephemeral-github-runner-action@<version to use>
+            env:
+              PULUMI_BACKEND_URL: ${{ secrets.PULUMI_BACKEND_URL }}
+              APP_ID: ${{ secrets.APP_ID }}
+              APP_PRIVATE_KEY: ${{ secrets.APP_PRIVATE_KEY }}
+              PULUMI_CONFIG_PASSPHRASE: ${{ secrets.PULUMI_CONFIG_PASSPHRASE }}
+              GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
+              GOOGLE_PROJECT: ${{ secrets.GOOGLE_PROJECT }}
+              GOOGLE_REGION: ${{ secrets.GOOGLE_REGION }}
+              GOOGLE_ZONE: ${{ secrets.GOOGLE_ZONE }}
+            with:
+              pulumi-config-path: <Path to the config file. e.g. dir1/dir2/config.yaml>
+              pulumi-goal:  <Pulumi goal. Supported: create, destroy>
+              pulumi-stack-name: <Stack name>
+              pulumi-cloud-provider: 'gcp'
+              cloud-architecture:  'amd64' #It's the only arch supported with gcp cloud provider.
+              pulumi-backend-url: ${{ secrets.PULUMI_BACKEND_URL }}
 ```
 
-See the [toolkit documentation](https://github.com/actions/toolkit/blob/master/README.md#packages) for the various packages.
+All the personal inputs are passed by github secret.
+[See the docs](https://docs.github.com/en/actions/security-guides/encrypted-secrets).
 
-## Package for distribution
+## How to Contribute
 
-GitHub Actions will run the entry point from the action.yml. Packaging assembles the code into one file that can be checked in to Git, enabling fast and reliable execution and preventing the need to check in node_modules.
+The repo use [@vercel/ncc](https://github.com/vercel/ncc) to compile the project inside a single file, look to [dist folder](./dist).\
+Every time you make changes to the source files you have to execute this command:
 
-Actions are run from GitHub repos.  Packaging the action will create a packaged action in the dist folder.
-
-Run prepare
-
-```bash
+```sh
 npm run prepare
 ```
 
-Since the packaged index.js is run from the dist folder.
+Then commit and push also the changes in the dist folder.
 
-```bash
-git add dist
-```
+## Main projects
 
-## Create a release branch
+Main project: [ephemeral-github-runner](https://github.com/pavlovic-ivan/ephemeral-github-runner)
 
-Users shouldn't consume the action from master since that would be latest code and actions can break compatibility between major versions.
+Images builder: [ephemeral-github-runner-image](https://github.com/pavlovic-ivan/ephemeral-github-runner-image)
 
-Checkin to the v1 release branch
+## Important
 
-```bash
-git checkout -b v1
-git commit -a -m "v1 release"
-```
+The workflow will fail if the cloud architecture == arm64 and the pulumi cloud provider == GCP.
 
-```bash
-git push origin v1
-```
+## References
 
-Note: We recommend using the `--license` option for ncc, which will create a license file for all of the production node modules used in your project.
+Generated from: [JavaScript-Action](https://github.com/actions/javascript-action)
 
-Your action is now published! :rocket:
+To learn how to create a simple action, start here: [Hello-World-JavaScript-Action](https://github.com/actions/hello-world-javascript-action)
 
-See the [versioning documentation](https://github.com/actions/toolkit/blob/master/docs/action-versioning.md)
-
-## Usage
-
-You can now consume the action by referencing the v1 branch
-
-```yaml
-uses: actions/javascript-action@v1
-with:
-  milliseconds: 1000
-```
-
-See the [actions tab](https://github.com/actions/javascript-action/actions) for runs of this action! :rocket:
+Recommended documentation: [Creating a JavaScript Action](https://docs.github.com/en/actions/creating-actions/creating-a-javascript-action)
