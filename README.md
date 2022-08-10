@@ -8,8 +8,8 @@
 
 A github action which deploys and destroys Ephemeral Github Runner.
 
-1. [PREREQUISITES](#prerequisites)
-2. [EXPLANATION](#inputs)
+1. [Prerequisites](#prerequisites)
+2. [Explanation](#inputs)
 3. [AWS](#aws-configuration)
 4. [GCP](#gcp-configuration)
 
@@ -19,43 +19,43 @@ Before starting make sure:
 
 1. You have a [github app](https://github.com/pavlovic-ivan/ephemeral-github-runner/blob/main/QUICKSTART.md#github-app-setup) linked to the repository where the runners have to work (Same repo of the one inside config.yaml file).
 2. You have an account set up in either AWS or GCP.
-3. You have a ready backend on the cloud provider you want to use (<s3://bucket_name> or <gs://bucket_name>).
-4. You have a machine image on the cloud provider you want to use.
+3. You have a ready storage on the cloud provider you want to use (<s3://bucket_name> or <gs://bucket_name>).
+4. You have a machine image on the cloud provider you want to use.__TODO__: Please provide an example for the image. What are we using currently?
 
 ## Inputs
 
 Everything below is required. There are no default values provided.
 
-- pulumi-config-path: A path to your Pulumi project config file
-- pulumi-goal: The name of the Pulumi goal. Supported values: create, destroy
-- pulumi-stack-name: The name of the Pulumi stack.
-- pulumi-cloud-provider: The name of the Pulumi cloud provider. Supported providers: aws, gcp
-- cloud-architecture: Supported architecture names: amd64 or arm64 (no support for gcp + arm64)
+- `pulumi-config-path`: A path to your Pulumi project config file
+- `pulumi-goal`: The name of the Pulumi goal. Supported values: `create`, `destroy`
+- `pulumi-stack-name`: The name of the Pulumi stack.
+- `pulumi-cloud-provider`: The name of the Pulumi cloud provider. Supported providers: `aws`, `gcp`
+- `cloud-architecture`: Supported architecture names: `amd64` or `arm64` (__no support for gcp + arm64__)
 
 ## Environment Variables
 
-- APP_ID: GitHub App ID
-- APP_PRIVATE_KEY: GitHub App Private Key
-- PULUMI_CONFIG_PASSPHRASE: A passphrase that will be used to encrypt secrets
+- `APP_ID`: GitHub App ID
+- `APP_PRIVATE_KEY`: GitHub App Private Key
+- `PULUMI_CONFIG_PASSPHRASE`: A passphrase that will be used to encrypt secrets
 
 AWS:
 
-- PULUMI_BACKEND_URL: Path to the S3 bucket in format -> s3://bucket_name
-- AWS_ACCESS_KEY_ID: Your access key id received when account was created
-- AWS_SECRET_ACCESS_KEY: Your secret access key received when account was created
-- AWS_REGION: AWS region, eg. eu-west-2
+- `PULUMI_BACKEND_URL`: Path to the S3 bucket in format -> s3://bucket_name
+- `AWS_ACCESS_KEY_ID`: Your access key id received when account was created
+- `AWS_SECRET_ACCESS_KEY`: Your secret access key received when account was created
+- `AWS_REGION`: AWS region, eg. `eu-west-2`
 
 GCP:
 
-- PULUMI_BACKEND_URL: Path to the GS bucket in format -> gs://bucket_name
-- GOOGLE_CREDENTIALS:  GCP credentials
-- GOOGLE_PROJECT: GCP project ID
-- GOOGLE_REGION: GCP region e.g. 'europe-west4'
-- GOOGLE_ZONE: GCP zone e.g. 'europe-west4-a'
+- `PULUMI_BACKEND_URL`: Path to the GS bucket in format -> gs://bucket_name
+- `GOOGLE_CREDENTIALS`: GCP credentials
+- `GOOGLE_PROJECT`: GCP project ID
+- `GOOGLE_REGION`: GCP region e.g. `europe-west4`
+- `GOOGLE_ZONE`: GCP zone e.g. `europe-west4-a`
 
 ## AWS Configuration
 
-Create a file called config.yaml with following content:
+Create a file called `config.yaml` with following content:
 
 ```yaml
 config:
@@ -67,10 +67,9 @@ config:
   ephemeral-github-runner:owner: <GitHub org or username under which the repo is>
   ephemeral-github-runner:repo: <GitHub repo name>
   ephemeral-github-runner:runnersCount: "1"
-  
  ```
 
- It isn't mandatory to put the  config file in the root directory. Example: 'dir1/dir2/config.yaml.'
+ It isn't mandatory to put the config file in the root directory. Example: 'dir1/dir2/config.yaml.'
 
 ## Usage example with AWS
 
@@ -92,10 +91,10 @@ jobs:
               AWS_REGION: ${{ secrets.AWS_REGION }}
             with:
               pulumi-config-path: <Path to the config file. e.g. dir1/dir2/config.yaml>
-              pulumi-goal:  <Pulumi goal. Supported: create, destroy>
+              pulumi-goal: <Pulumi goal. Supported: create, destroy>
               pulumi-stack-name: <Stack name>
               pulumi-cloud-provider: 'aws'
-              cloud-architecture:  <Architecture to use. Supported: amd64, arm64>
+              cloud-architecture: <Architecture to use. Supported: amd64, arm64>
               pulumi-backend-url: ${{ secrets.PULUMI_BACKEND_URL }}
 ```
 
@@ -104,7 +103,7 @@ All the personal inputs are passed by github secret.
 
 ## GCP Configuration
 
-Create a file called config.yaml with following content:
+Create a file called `config.yaml` with following content:
 
 ```yaml
 config:
@@ -118,7 +117,7 @@ config:
   ephemeral-github-runner:runnersCount: "1"
 ```
 
-It isn't mandatory to put the  config file in the root directory. Example: 'dir1/dir2/config.yaml.'
+It isn't mandatory to put the config file in the root directory. Example: 'dir1/dir2/config.yaml.'
 
 ## Usage example with GCP
 
@@ -141,10 +140,10 @@ jobs:
               GOOGLE_ZONE: ${{ secrets.GOOGLE_ZONE }}
             with:
               pulumi-config-path: <Path to the config file. e.g. dir1/dir2/config.yaml>
-              pulumi-goal:  <Pulumi goal. Supported: create, destroy>
+              pulumi-goal: <Pulumi goal. Supported: create, destroy>
               pulumi-stack-name: <Stack name>
               pulumi-cloud-provider: 'gcp'
-              cloud-architecture:  'amd64' #It's the only arch supported with gcp cloud provider.
+              cloud-architecture: 'amd64' #It's the only arch supported with gcp cloud provider.
               pulumi-backend-url: ${{ secrets.PULUMI_BACKEND_URL }}
 ```
 
@@ -153,10 +152,14 @@ All the personal inputs are passed by github secret.
 
 ## How to Contribute
 
+- __TODO__: This can be improved with something called `git hooks`. Concept is that before some git command your action (usually bash/sh script) is executed. Example on [link](https://help.gitkraken.com/gitkraken-client/githooksexample/)
+- __TODO__: mentioned used `node` and `npm` as suggestion to use
+
 The repo use [@vercel/ncc](https://github.com/vercel/ncc) to compile the project inside a single file, look to [dist folder](./dist).\
 Every time you make changes to the source files you have to execute this command:
 
 ```sh
+npm install
 npm run prepare
 ```
 
@@ -164,18 +167,13 @@ Then commit and push also the changes in the dist folder.
 
 ## Main projects
 
-Main project: [ephemeral-github-runner](https://github.com/pavlovic-ivan/ephemeral-github-runner)
+- Main project: [ephemeral-github-runner](https://github.com/pavlovic-ivan/ephemeral-github-runner)
+- Images builder: [ephemeral-github-runner-image](https://github.com/pavlovic-ivan/ephemeral-github-runner-image)
 
-Images builder: [ephemeral-github-runner-image](https://github.com/pavlovic-ivan/ephemeral-github-runner-image)
-
-## Important
-
-The workflow will fail if the cloud architecture == arm64 and the pulumi cloud provider == GCP.
+### _NOTE_: _The workflow will fail if the cloud architecture == arm64 and the pulumi cloud provider == GCP._
 
 ## References
 
-Generated from: [JavaScript-Action](https://github.com/actions/javascript-action)
-
-To learn how to create a simple action, start here: [Hello-World-JavaScript-Action](https://github.com/actions/hello-world-javascript-action)
-
-Recommended documentation: [Creating a JavaScript Action](https://docs.github.com/en/actions/creating-actions/creating-a-javascript-action)
+- Generated from: [JavaScript-Action](https://github.com/actions/javascript-action)
+- To learn how to create a simple action, start here: [Hello-World-JavaScript-Action](https://github.com/actions/hello-world-javascript-action)
+- Recommended documentation: [Creating a JavaScript Action](https://docs.github.com/en/actions/creating-actions/creating-a-javascript-action)
