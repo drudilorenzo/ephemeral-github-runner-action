@@ -9,7 +9,7 @@ const pulumiGoals = {
 async function deployRunners(CONFIG) {
     try {
         core.info("Deploying the runners...");
-        await exec.exec('pulumi', ['login', `${CONFIG.pulumiBackendUrl}`], { cwd: CONFIG.runnerRepoPath });
+        await exec.exec('pulumi', ['login', process.env.PULUMI_BACKEND_URL], { cwd: CONFIG.runnerRepoPath });
         await exec.exec('pulumi', ['stack', 'init', `${CONFIG.stackName}`], { cwd: CONFIG.providerPath });
         await exec.exec('pulumi', ['update', '--diff', '--config-file', `${CONFIG.configFilePath}`], 
             { cwd: CONFIG.providerPath });
@@ -22,7 +22,7 @@ async function deployRunners(CONFIG) {
 async function destroyRunners(CONFIG) {
     try {
         core.info("Destroying the runners");
-        await exec.exec('pulumi', ['login', `${CONFIG.pulumiBackendUrl}`], { cwd: CONFIG.runnerRepoPath });
+        await exec.exec('pulumi', ['login', process.env.PULUMI_BACKEND_URL], { cwd: CONFIG.runnerRepoPath });
         await exec.exec('pulumi', ['stack', 'select', `${CONFIG.stackName}`], { cwd: CONFIG.providerPath });
         await exec.exec('pulumi', ['destroy', '--config-file', `${CONFIG.configFilePath}`], 
             { cwd: CONFIG.providerPath });

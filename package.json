@@ -2,11 +2,11 @@
   "name": "ephemeral-github-runner-action",
   "version": "1.0.0",
   "description": "Javascript github action to deploy and destroy self-hosted runners.",
-  "main": "index.js",
+  "main": "src/index.js",
   "scripts": {
     "lint": "eslint .",
-    "prepare": "ncc build src/index.js -o dist --source-map --license licenses.txt",
-    "all": "npm run lint && npm run prepare && npm run test"
+    "prepare": "ncc build src/index.js -o dist --source-map --license licenses.txt && husky install",
+    "all": "npm run lint && npm run prepare"
   },
   "repository": {
     "type": "git",
@@ -20,19 +20,20 @@
     "DevOps",
     "Runners"
   ],
-  "author": "",
+  "author": "Celina Cywinska & Lorenzo Drudi",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/LorenzoDrudi/ephemeral-github-runner-action/issues"
   },
-  "homepage": "https://github.com/LorenzoDrudi/ephemeral-github-runner-action/blob/main/README.md",
+  "homepage": "https://github.com/LorenzoDrudi/ephemeral-github-runner-action/blob/main/README.md#javascript-github-action-to-deploy-and-destroy-self-hosted-runners",
   "dependencies": {
-    "@actions/core": "^1.2.5",
+    "@actions/core": "^1.9.1",
     "@actions/exec": "^1.1.1",
     "@actions/github": "^5.0.3"
   },
   "devDependencies": {
     "@vercel/ncc": "^0.31.1",
-    "eslint": "^8.20.0"
+    "eslint": "^8.20.0",
+    "husky": "^8.0.1"
   }
 }

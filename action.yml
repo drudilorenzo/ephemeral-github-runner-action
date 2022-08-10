@@ -1,5 +1,9 @@
 name: 'Create/destroy runners'
 description: 'Github action to create and destroy Runners'
+author: 'cellinacywinska & LorenzoDrudi'
+branding:
+  icon: 'archive'
+  color: 'purple'
 inputs:
   pulumi-config-path: 
     description: 'A path to your Pulumi project config file'
@@ -19,10 +23,6 @@ inputs:
     default: ''
   cloud-architecture: 
     description: 'Supported architecture names: amd64 or arm64 (no support for gcp + arm64)' 
-    required: true
-    default: ''
-  pulumi-backend-url:
-    description: 'The url of the pulumi backend'
     required: true
     default: ''
 runs:
