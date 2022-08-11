@@ -1,5 +1,8 @@
 name: 'Create/destroy runners'
 description: 'Github action to create and destroy Runners'
+author:
+  - 'cellinacywinska'
+  - 'LorenzoDrudi'
 inputs:
   pulumi-config-path: 
     description: 'A path to your Pulumi project config file'
