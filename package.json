@@ -12,6 +12,9 @@
     "type": "git",
     "url": "https://github.com/LorenzoDrudi/ephemeral-github-runner-action"
   },
+  "git-pre-hooks": {
+    "pre-push": "npm run prepare && git add dist/* && git commit -m \"Add dist folder\""
+  },
   "keywords": [
     "GitHub",
     "Actions",
@@ -20,7 +23,7 @@
     "DevOps",
     "Runners"
   ],
-  "author": "",
+  "author": "Celina Cywinska & Lorenzo Drudi",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/LorenzoDrudi/ephemeral-github-runner-action/issues"
@@ -33,6 +36,7 @@
   },
   "devDependencies": {
     "@vercel/ncc": "^0.31.1",
-    "eslint": "^8.20.0"
+    "eslint": "^8.20.0",
+    "git-pre-hooks": "^1.2.1"
   }
 }
