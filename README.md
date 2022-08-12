@@ -149,20 +149,12 @@ jobs:
 All the personal inputs are passed by github secret.
 [See the docs](https://docs.github.com/en/actions/security-guides/encrypted-secrets).
 
-## How to Contribute
+## Used
 
-- __TODO__: This can be improved with something called `git hooks`. Concept is that before some git command your action (usually bash/sh script) is executed. Example on [link](https://help.gitkraken.com/gitkraken-client/githooksexample/)
-- __TODO__: mentioned used `node` and `npm` as suggestion to use
-
-The repo use [@vercel/ncc](https://github.com/vercel/ncc) to compile the project inside a single file, look to [dist folder](./dist).\
-Every time you make changes to the source files you have to execute this command:
-
-```sh
-npm install
-npm run prepare
-```
-
-Then commit and push also the changes in the dist folder.
+1. Node
+2. Npm
+3. [Vercel/ncc](https://github.com/vercel/ncc): used to compile the project inside a single file, look to [dist folder](./dist).
+4. [Husky](https://typicode.github.io/husky/#/): used to manage the git hooks, every time there is a commit the pre-commit hook call ncc and add the dist folder to the stage.
 
 ## Main projects
 
