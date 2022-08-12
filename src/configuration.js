@@ -16,7 +16,7 @@ function createConfig() {
         stackName: core.getInput('pulumi-stack-name'),
         cloudProvider: core.getInput('pulumi-cloud-provider').toUpperCase(),
         cloudArch: core.getInput('cloud-architecture').toUpperCase(),
-        pulumiBackendUrl: core.getInput('pulumi-backend-url'),
+//         pulumiBackendUrl: core.getInput('pulumi-backend-url'),
         providerPath: HOME_DIRECTORY + "/ephemeral-github-runner" + "/" 
             + core.getInput('pulumi-cloud-provider').toLowerCase()
     }
