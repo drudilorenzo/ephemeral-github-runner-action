@@ -13,7 +13,7 @@
     "url": "https://github.com/LorenzoDrudi/ephemeral-github-runner-action"
   },
   "git-pre-hooks": {
-    "pre-push": "npm run prepare && git add dist && git commit -m 'Add dist folder'"
+    "pre-push": "npm run prepare && git add dist && git commit -m 'Add dist folder.'"
   },
   "keywords": [
     "GitHub",
