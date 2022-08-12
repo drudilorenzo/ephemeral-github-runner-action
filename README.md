@@ -8,7 +8,7 @@
 [![Stable Version](https://img.shields.io/github/v/tag/LorenzoDrudi/ephemeral-github-runner-action)](https://img.shields.io/github/v/tag/LorenzoDrudi/ephemeral-github-runner-action)
 [![Latest Release](https://img.shields.io/github/v/release/LorenzoDrudi/ephemeral-github-runner-action?color=%233D9970)](https://img.shields.io/github/v/release/LorenzoDrudi/ephemeral-github-runner-action?color=%233D9970)
 
-A github action which deploys and destroys Ephemeral Github Runner.
+A Github Action to deploy and destroy Ephemeral Github Runners.
 
 1. [Prerequisites](#prerequisites)
 2. [Explanation](#inputs)
@@ -17,12 +17,12 @@ A github action which deploys and destroys Ephemeral Github Runner.
 
 ## Prerequisites
 
-Before starting make sure:
+Before starting make sure you have:
 
-1. You have a [github app](https://github.com/pavlovic-ivan/ephemeral-github-runner/blob/main/QUICKSTART.md#github-app-setup) linked to the repository where the runners have to work (Same repo of the one inside config.yaml file).
-2. You have an account set up in either AWS or GCP.
-3. You have a ready storage on the cloud provider you want to use (<s3://bucket_name> or <gs://bucket_name>).
-4. You have a machine image with github runner installed on the cloud provider you want to use.
+1. A [github app](https://github.com/pavlovic-ivan/ephemeral-github-runner/blob/main/QUICKSTART.md#github-app-setup) linked to the repository where the runners are to do the work (that means the same repository mentioned inside the config.yaml file).
+2. An account set up in either AWS or GCP.
+3. A ready storage on the cloud provider you decided to use (<s3://bucket_name> or <gs://bucket_name>).
+4. A machine image with Github runner installed. In case of AWS it is the AWS AMI name. For GCP is it the path to the GCP machine image.
 ## Inputs
 
 Everything below is required. There are no default values provided.
