@@ -20,8 +20,7 @@ Before starting make sure:
 1. You have a [github app](https://github.com/pavlovic-ivan/ephemeral-github-runner/blob/main/QUICKSTART.md#github-app-setup) linked to the repository where the runners have to work (Same repo of the one inside config.yaml file).
 2. You have an account set up in either AWS or GCP.
 3. You have a ready storage on the cloud provider you want to use (<s3://bucket_name> or <gs://bucket_name>).
-4. You have a machine image on the cloud provider you want to use.__TODO__: Please provide an example for the image. What are we using currently?
-
+4. You have a machine image with github runner installed on the cloud provider you want to use.
 ## Inputs
 
 Everything below is required. There are no default values provided.
@@ -62,7 +61,7 @@ config:
   ephemeral-github-runner:bootDiskSizeInGB: "100"
   ephemeral-github-runner:bootDiskType: gp2
   ephemeral-github-runner:labels: <comma-separated list of runner labels>
-  ephemeral-github-runner:machineImage: <path to the AWS AMI machine image with Github runner installed>
+  ephemeral-github-runner:machineImage: <AWS AMI name of the machine image with Github runner installed>
   ephemeral-github-runner:machineType: <machine type of your choice>
   ephemeral-github-runner:owner: <GitHub org or username under which the repo is>
   ephemeral-github-runner:repo: <GitHub repo name>
