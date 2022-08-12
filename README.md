@@ -62,7 +62,7 @@ Create a file called `config.yaml` with following content:
 ```yaml
 config:
   ephemeral-github-runner:bootDiskSizeInGB: <>
-  ephemeral-github-runner:bootDiskType: <> (in case of AWS >> "# like gp2")
+  ephemeral-github-runner:bootDiskType: <> (# like gp2)
   ephemeral-github-runner:labels: <comma-separated list of runner labels>
   ephemeral-github-runner:machineImage: <AWS AMI name of the machine image with Github runner installed>
   ephemeral-github-runner:machineType: <machine type of your choice>
@@ -109,7 +109,7 @@ Create a file called `config.yaml` with following content:
 ```yaml
 config:
   ephemeral-github-runner:bootDiskSizeInGB: <>
-  ephemeral-github-runner:bootDiskType: <> (in case of GCP >> "# like pd-balanced")
+  ephemeral-github-runner:bootDiskType: <> (# like pd-balanced)
   ephemeral-github-runner:labels: <comma-separated list of runner labels>
   ephemeral-github-runner:machineImage: <name of the GCP machine image with Github runner installed>
   ephemeral-github-runner:machineType: <machine type of your choice>
