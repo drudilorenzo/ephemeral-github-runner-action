@@ -24,10 +24,6 @@ inputs:
     description: 'Supported architecture names: amd64 or arm64 (no support for gcp + arm64)' 
     required: true
     default: ''
-#   pulumi-backend-url:
-#     description: 'The url of the pulumi backend'
-#     required: true
-#     default: ''
 runs:
   using: 'node16'
   main: 'dist/index.js'
