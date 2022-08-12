@@ -5,6 +5,8 @@
 [![AWS](https://img.shields.io/badge/AWS-%23FF9900.svg?style=for-the-badge&logo=amazon-aws&logoColor=white)](https://aws.amazon.com/)
 [![Google Cloud](https://img.shields.io/badge/GoogleCloud-%234285F4.svg?style=for-the-badge&logo=google-cloud&logoColor=white)](https://cloud.google.com/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Stable Version](https://img.shields.io/github/v/tag/LorenzoDrudi/ephemeral-github-runner-action)](https://img.shields.io/github/v/tag/LorenzoDrudi/ephemeral-github-runner-action)
+[![Latest Release](https://img.shields.io/github/v/release/LorenzoDrudi/ephemeral-github-runner-action?color=%233D9970)](https://img.shields.io/github/v/release/LorenzoDrudi/ephemeral-github-runner-action?color=%233D9970)
 
 A github action which deploys and destroys Ephemeral Github Runner.
 
