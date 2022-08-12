@@ -96,7 +96,6 @@ jobs:
               pulumi-stack-name: <Stack name>
               pulumi-cloud-provider: 'aws'
               cloud-architecture: <Architecture to use. Supported: amd64, arm64>
-              pulumi-backend-url: ${{ secrets.PULUMI_BACKEND_URL }}
 ```
 
 All the personal inputs are passed by github secret.
@@ -145,7 +144,6 @@ jobs:
               pulumi-stack-name: <Stack name>
               pulumi-cloud-provider: 'gcp'
               cloud-architecture: 'amd64' #It's the only arch supported with gcp cloud provider.
-              pulumi-backend-url: ${{ secrets.PULUMI_BACKEND_URL }}
 ```
 
 All the personal inputs are passed by github secret.
