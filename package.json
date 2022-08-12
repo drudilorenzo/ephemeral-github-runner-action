@@ -5,15 +5,12 @@
   "main": "index.js",
   "scripts": {
     "lint": "eslint .",
-    "prepare": "ncc build src/index.js -o dist --source-map --license licenses.txt",
+    "prepare": "ncc build src/index.js -o dist --source-map --license licenses.txt && husky install",
     "all": "npm run lint && npm run prepare && npm run test"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/LorenzoDrudi/ephemeral-github-runner-action"
-  },
-  "git-pre-hooks": {
-    "pre-push": "npm run prepare && git add dist && git commit -m 'Add dist folder.'"
   },
   "keywords": [
     "GitHub",
@@ -37,6 +34,6 @@
   "devDependencies": {
     "@vercel/ncc": "^0.31.1",
     "eslint": "^8.20.0",
-    "git-pre-hooks": "^1.2.1"
+    "husky": "^8.0.1"
   }
 }

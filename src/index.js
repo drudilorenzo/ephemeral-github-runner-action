@@ -13,7 +13,6 @@ async function run() {
 
         // Simple check on provider, arch and goal.
         // There's no support for arm64 machine on gcp.
-        console.log("Testing.")
         core.info("Checking the inputs...");
         if (!Object.values(providers).includes(CONFIG.cloudProvider)) {
             throw new Error("Wrong provider. Supported: aws, gcp");
