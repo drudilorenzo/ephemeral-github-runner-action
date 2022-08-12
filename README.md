@@ -22,7 +22,8 @@ Before starting make sure you have:
 1. A [github app](https://github.com/pavlovic-ivan/ephemeral-github-runner/blob/main/QUICKSTART.md#github-app-setup) linked to the repository where the runners are to do the work (that means the same repository mentioned inside the config.yaml file).
 2. An account set up in either AWS or GCP.
 3. A ready storage on the cloud provider you decided to use (<s3://bucket_name> or <gs://bucket_name>).
-4. A machine image with Github runner installed. In case of AWS it is the AWS AMI name. For GCP is it the path to the GCP machine image.
+4. A machine image with Github runner installed. In case of AWS it is the AWS AMI name. For GCP is it the name of GCP machine image.
+5. Added secrets to your repository that are later used to set environment variables. More information on secrets: [How to set up secrets](https://docs.github.com/en/actions/security-guides/encrypted-secrets).
 ## Inputs
 
 Everything below is required. There are no default values provided.
@@ -60,8 +61,8 @@ Create a file called `config.yaml` with following content:
 
 ```yaml
 config:
-  ephemeral-github-runner:bootDiskSizeInGB: "100"
-  ephemeral-github-runner:bootDiskType: gp2
+  ephemeral-github-runner:bootDiskSizeInGB: <>
+  ephemeral-github-runner:bootDiskType: <> (in case of AWS >> "# like gp2")
   ephemeral-github-runner:labels: <comma-separated list of runner labels>
   ephemeral-github-runner:machineImage: <AWS AMI name of the machine image with Github runner installed>
   ephemeral-github-runner:machineType: <machine type of your choice>
@@ -107,10 +108,10 @@ Create a file called `config.yaml` with following content:
 
 ```yaml
 config:
-  ephemeral-github-runner:bootDiskSizeInGB: "100"
-  ephemeral-github-runner:bootDiskType: pd-balanced
+  ephemeral-github-runner:bootDiskSizeInGB: <>
+  ephemeral-github-runner:bootDiskType: <> (in case of GCP >> "# like pd-balanced")
   ephemeral-github-runner:labels: <comma-separated list of runner labels>
-  ephemeral-github-runner:machineImage: <path to the GCP machine image with Github runner installed>
+  ephemeral-github-runner:machineImage: <name of the GCP machine image with Github runner installed>
   ephemeral-github-runner:machineType: <machine type of your choice>
   ephemeral-github-runner:owner: <GitHub org or username under which the repo is>
   ephemeral-github-runner:repo: <GitHub repo name>
