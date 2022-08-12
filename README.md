@@ -20,8 +20,7 @@ Before starting make sure:
 1. You have a [github app](https://github.com/pavlovic-ivan/ephemeral-github-runner/blob/main/QUICKSTART.md#github-app-setup) linked to the repository where the runners have to work (Same repo of the one inside config.yaml file).
 2. You have an account set up in either AWS or GCP.
 3. You have a ready storage on the cloud provider you want to use (<s3://bucket_name> or <gs://bucket_name>).
-4. You have a machine image on the cloud provider you want to use.__TODO__: Please provide an example for the image. What are we using currently?
-
+4. You have a machine image with github runner installed on the cloud provider you want to use.
 ## Inputs
 
 Everything below is required. There are no default values provided.
@@ -62,7 +61,7 @@ config:
   ephemeral-github-runner:bootDiskSizeInGB: "100"
   ephemeral-github-runner:bootDiskType: gp2
   ephemeral-github-runner:labels: <comma-separated list of runner labels>
-  ephemeral-github-runner:machineImage: <path to the AWS AMI machine image with Github runner installed>
+  ephemeral-github-runner:machineImage: <AWS AMI name of the machine image with Github runner installed>
   ephemeral-github-runner:machineType: <machine type of your choice>
   ephemeral-github-runner:owner: <GitHub org or username under which the repo is>
   ephemeral-github-runner:repo: <GitHub repo name>
@@ -150,20 +149,12 @@ jobs:
 All the personal inputs are passed by github secret.
 [See the docs](https://docs.github.com/en/actions/security-guides/encrypted-secrets).
 
-## How to Contribute
+## Used
 
-- __TODO__: This can be improved with something called `git hooks`. Concept is that before some git command your action (usually bash/sh script) is executed. Example on [link](https://help.gitkraken.com/gitkraken-client/githooksexample/)
-- __TODO__: mentioned used `node` and `npm` as suggestion to use
-
-The repo use [@vercel/ncc](https://github.com/vercel/ncc) to compile the project inside a single file, look to [dist folder](./dist).\
-Every time you make changes to the source files you have to execute this command:
-
-```sh
-npm install
-npm run prepare
-```
-
-Then commit and push also the changes in the dist folder.
+1. Node
+2. Npm
+3. [Vercel/ncc](https://github.com/vercel/ncc): used to compile the project inside a single file, look to [dist folder](./dist).
+4. [Husky](https://typicode.github.io/husky/#/): used to manage the git hooks, every time there is a commit the pre-commit hook call ncc and add the dist folder to the stage.
 
 ## Main projects
 
