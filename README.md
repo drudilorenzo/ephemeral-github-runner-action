@@ -156,6 +156,17 @@ All the personal inputs are passed by github secret.
 3. [Vercel/ncc](https://github.com/vercel/ncc): used to compile the project inside a single file, look to [dist folder](./dist).
 4. [Husky](https://typicode.github.io/husky/#/): used to manage the git hooks, every time there is a commit the pre-commit hook call ncc and add the dist folder to the stage.
 
+## Tags and Releases
+
+A github action workflow automatically creates a Tag and a Release every push on the main branch. 
+The idea is to work on develop/features branches and when it's done merge to the main branch, so the workflow starts.
+
+The default behaviour is to create a major tag/release (e.g. *.0.0), the schema is `<major_version>.<minor_version>.<patch_version>`
+It's possible also to create minor or patch tags/releases adding a tag at the end of the commit messagge:
+
+- #minor -> e.g. 1.*.0
+- #patch -> e.g. 1.1.*
+
 ## Main projects
 
 - Main project: [ephemeral-github-runner](https://github.com/pavlovic-ivan/ephemeral-github-runner)
