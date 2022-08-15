@@ -10,7 +10,7 @@ async function run() {
     try {
         // Get all the inputs needed and construct a dictionary containing them.
         const CONFIG = configuration.getConfig();
-        const parsedProviders = 'Supported providers: ';
+        var parsedProviders = 'Supported providers: ';
         
         for (const prop in providers) {
             console.log(`${prop}: ${providers[prop]}`);
