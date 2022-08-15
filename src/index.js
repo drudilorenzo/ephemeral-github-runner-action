@@ -10,27 +10,29 @@ async function run() {
     try {
         // Get all the inputs needed and construct a dictionary containing them.
         const CONFIG = configuration.getConfig();
-        var parsedProviders = 'Supported providers: ';
-        
-        for (const prop in providers) {
-            console.log(`${prop}: ${providers[prop]}`);
-            parsedProviders += `${providers[prop]}`;
-            parsedProviders += ' ';
-        }
 
-        parsedProviders += '.';
+        function parseInput(args){
+            var parsedInput = "";
+            for (const prop in args) {
+              parsedInput += `${args[prop]}`;
+              parsedInput += ', ';
+            }
+            parsedInput =  parsedInput.trim().slice(0, -1);
+          
+            return parsedInput;
+        }
 
         // Simple check on provider, arch and goal.
         // There's no support for arm64 machine on gcp.
         core.info("Checking the inputs...");
         if (!Object.values(providers).includes(CONFIG.cloudProvider)) {
-            throw new Error(`Wrong provider. Supported: ${parsedProviders}`);
+            throw new Error(`Wrong provider. Supported: ${parseInput(providers)}.`);
         } else if (!Object.values(architectures).includes(CONFIG.cloudArch)) {
-            throw new Error("Wrong arch. Supported: arm64, amd64");
+            throw new Error(`Wrong arch. Supported: ${parseInput(architectures)}.`);
         } else if (CONFIG.cloudProvider == providers.GCP && CONFIG.cloudArch == architectures.ARM64) {
             throw new Error("Don't support gcp arm64 machines");
         } else if (!Object.values(pulumiGoals.pulumiGoals).includes(CONFIG.pulumiGoal)) {
-            throw new Error("Wrong goal. Supported: create, destroy");
+            throw new Error(`Wrong goal. Supported: ${parseInput(pulumiGoals)}.`);
         }
         core.info("Check passed!");
 
