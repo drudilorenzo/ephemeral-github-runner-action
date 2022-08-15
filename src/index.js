@@ -13,15 +13,12 @@ async function run() {
         const parsedProviders = 'Supported providers: ';
         
         for (const prop in providers) {
-           // console.log(`${prop}: ${providers[prop]}`);
+            console.log(`${prop}: ${providers[prop]}`);
             parsedProviders += `${providers[prop]}`;
             parsedProviders += ' ';
         }
 
         parsedProviders += '.';
-
-
-
 
         // Simple check on provider, arch and goal.
         // There's no support for arm64 machine on gcp.
