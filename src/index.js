@@ -10,12 +10,24 @@ async function run() {
     try {
         // Get all the inputs needed and construct a dictionary containing them.
         const CONFIG = configuration.getConfig();
+        const parsedProviders = 'Supported providers: ';
+        
+        for (const prop in providers) {
+           // console.log(`${prop}: ${providers[prop]}`);
+            parsedProviders += `${providers[prop]}`;
+            parsedProviders += ' ';
+        }
+
+        parsedProviders += '.';
+
+
+
 
         // Simple check on provider, arch and goal.
         // There's no support for arm64 machine on gcp.
         core.info("Checking the inputs...");
         if (!Object.values(providers).includes(CONFIG.cloudProvider)) {
-            throw new Error("Wrong provider. Supported: aws, gcp");
+            throw new Error(`Wrong provider. Supported: ${parsedProviders}`);
         } else if (!Object.values(architectures).includes(CONFIG.cloudArch)) {
             throw new Error("Wrong arch. Supported: arm64, amd64");
         } else if (CONFIG.cloudProvider == providers.GCP && CONFIG.cloudArch == architectures.ARM64) {
@@ -61,4 +73,3 @@ function buildUserRepoUrl() {
 }
 
 run();
-
