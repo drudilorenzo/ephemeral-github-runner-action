@@ -15,13 +15,13 @@ async function run() {
         // There's no support for arm64 machine on gcp.
         core.info("Checking the inputs...");
         if (!Object.values(providers).includes(CONFIG.cloudProvider)) {
-            throw new Error("Wrong provider. Supported: aws, gcp");
+            throw new Error(`Wrong provider. Supported: ${Object.values(providers)}`);
         } else if (!Object.values(architectures).includes(CONFIG.cloudArch)) {
-            throw new Error("Wrong arch. Supported: arm64, amd64");
+            throw new Error(`Wrong arch. Supported: ${Object.values(architectures)}`);
         } else if (CONFIG.cloudProvider == providers.GCP && CONFIG.cloudArch == architectures.ARM64) {
             throw new Error("Don't support gcp arm64 machines");
         } else if (!Object.values(pulumiGoals.pulumiGoals).includes(CONFIG.pulumiGoal)) {
-            throw new Error("Wrong goal. Supported: create, destroy");
+            throw new Error(`Wrong goal. Supported: ${Object.values(pulumiGoals.pulumiGoals)}`);
         }
         core.info("Check passed!");
 
@@ -35,8 +35,7 @@ async function run() {
         await exec.exec('git', ['clone', `${RUNNER_REPO_URL}`]);
         await exec.exec('npm', ['ci', '--loglevel=error'],  { cwd: CONFIG.runnerRepoPath });
 
-        // Clone the repository which need the runners and obtain the path to the config.yaml file.
-        // If the repository is private we need an access token to be able to clone it.
+        // Clone the repository which need the runners and compute the path to the config.yaml file.
         const USER_REPO_URL = buildUserRepoUrl(CONFIG);
         await exec.exec('git', ['clone', `${USER_REPO_URL}`]);
 
@@ -54,10 +53,7 @@ async function run() {
 }
 
 function buildUserRepoUrl() {
-    let urlPrefix = "https://github.com/";
-    return urlPrefix
-        + github.context.payload.repository.owner.login + "/"
-        + github.context.payload.repository.name;
+    return `https://github.com/${github.context.payload.repository.owner.login}/${github.context.payload.repository.name}`;
 }
 
 run();
